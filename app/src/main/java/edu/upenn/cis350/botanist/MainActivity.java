@@ -8,6 +8,9 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
@@ -23,6 +26,32 @@ public class MainActivity extends AppCompatActivity {
         // Check needed in recent APK levels even if perms. in manifest
         verifyReadWritePermission(this);
         setContentView(R.layout.activity_main);
+
+        // Set up the main menu list
+        ListView mainMenuList = (ListView) findViewById(R.id.main_menu_list);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.main_menu_array, android.R.layout.simple_list_item_1);
+        mainMenuList.setAdapter(adapter);
+        mainMenuList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String itemValue = (String) parent.getItemAtPosition(position);
+                switch (itemValue) {
+                    case "Monitor Plants":
+                        break;
+                    case "Take a Photo":
+                        break;
+                    case "Add New Plant":
+                        Intent addPlantIntent = new Intent(getApplicationContext(), AddPlantActivity.class);
+                        startActivity(addPlantIntent);
+                        break;
+                    case "View Plant Types":
+                        break;
+                    case "Settings":
+                        break;
+                }
+            }
+        });
     }
 
     public static void verifyReadWritePermission(Activity activity) {
@@ -34,10 +63,5 @@ public class MainActivity extends AppCompatActivity {
                                               STORAGE_PERMISSIONS,
                                               REQUEST_EXTERNAL_STORAGE);
         }
-    }
-
-    public void addPlant(View view) {
-        Intent intent = new Intent(this, AddPlantActivity.class);
-        startActivity(intent);
     }
 }
