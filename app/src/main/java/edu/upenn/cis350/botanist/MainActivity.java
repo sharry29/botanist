@@ -40,6 +40,8 @@ public class MainActivity extends AppCompatActivity {
                     case "Monitor Plants":
                         break;
                     case "Take a Photo":
+                        Intent takePhotoIntent = new Intent(getApplicationContext(), PhotoActivity.class);
+                        startActivity(takePhotoIntent);
                         break;
                     case "Add New Plant":
                         Intent addPlantIntent = new Intent(getApplicationContext(), AddPlantActivity.class);
