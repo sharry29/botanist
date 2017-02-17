@@ -26,7 +26,7 @@ public class PhotoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         dispatchTakePictureIntent();
-
+        finish();
     }
 
     private void dispatchTakePictureIntent() {
