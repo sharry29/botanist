@@ -8,6 +8,7 @@ import android.view.View;
 import android.webkit.WebView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.TextView;
 
 public class AddPlantActivity extends AppCompatActivity {
 
@@ -34,5 +35,13 @@ public class AddPlantActivity extends AppCompatActivity {
             Intent intent = new Intent(Intent.ACTION_VIEW, uri);
             startActivity(intent);
         }
+    }
+
+    public void addNewPlant(View view) {
+        TextView plantText = (TextView) findViewById(R.id.plant_name);
+        String plantName = String.valueOf(plantText.getText());
+        TextView typeText = (TextView) findViewById(R.id.plant_list);
+        String plantType = String.valueOf(typeText.getText());
+        System.out.println("The user would like to store PlantName: " + plantName + " PlantType: " + plantType);
     }
 }
