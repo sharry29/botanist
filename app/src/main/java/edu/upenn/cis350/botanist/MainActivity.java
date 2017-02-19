@@ -38,6 +38,8 @@ public class MainActivity extends AppCompatActivity {
                 String itemValue = (String) parent.getItemAtPosition(position);
                 switch (itemValue) {
                     case "Monitor Plants":
+                        Intent myPlantsIntent = new Intent(getApplicationContext(), MyPlantsActivity.class);
+                        startActivity(myPlantsIntent);
                         break;
                     case "Take a Photo":
                         Intent takePhotoIntent = new Intent(getApplicationContext(), PhotoActivity.class);
