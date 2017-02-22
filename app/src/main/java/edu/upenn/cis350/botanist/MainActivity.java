@@ -2,6 +2,7 @@ package edu.upenn.cis350.botanist;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.v4.app.ActivityCompat;
@@ -11,6 +12,11 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
@@ -22,6 +28,25 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        System.out.println("here");
+        // TEST CODE!!!
+        String FILENAME = "my_plants";
+        FileInputStream f = null;
+        try {
+            f = openFileInput(FILENAME);
+            int chr = f.read();
+            String str = "";
+            while (chr != -1) {
+                str = str + Character.toString((char) chr);
+                chr = f.read();
+            }
+            System.out.println(str);
+            f.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         // Check needed in recent APK levels even if perms. in manifest
         verifyReadWritePermission(this);
@@ -54,6 +79,8 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
+
     }
 
     public static void verifyReadWritePermission(Activity activity) {
