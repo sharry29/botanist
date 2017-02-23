@@ -13,6 +13,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -24,10 +25,13 @@ public class MainActivity extends AppCompatActivity {
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE
     };
+    protected static File MY_PLANTS_FILE;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        MY_PLANTS_FILE = confirmFlowersFilePresent();
+
         System.out.println("here");
         // TEST CODE!!!
         String FILENAME = "my_plants";
@@ -85,6 +89,17 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    protected File confirmFlowersFilePresent() {
+        File storageDirectory = getFilesDir();
+        File flowersFile = new File(storageDirectory.getAbsolutePath() + "/my_plants");
+        try {
+            flowersFile.createNewFile();
+        } catch (IOException e) {
+            System.err.println("Failed to confirm existence of my_flowers.");
+            e.printStackTrace();
+        }
+        return flowersFile;
+    }
     public static void verifyReadWritePermission(Activity activity) {
         int permissionCode = ActivityCompat.checkSelfPermission(activity,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE);
