@@ -13,13 +13,18 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * Created by Harry on 2/16/17.
@@ -36,74 +41,89 @@ public class PhotoActivity extends AppCompatActivity {
         //dispatchTakePictureIntent();
         //finish();
 
-        //Create the list objects
-//        LinearLayout plantList = (LinearLayout) findViewById(R.id.plant_list);
-//        String FILENAME = "my_plants";
-//        FileInputStream f = null;
-//        try {
-//            f = openFileInput(FILENAME);
-//            int chr = f.read();
-//            String str = "";
-//            while (chr != -1) {
-//                str = str + Character.toString((char) chr);
-//                chr = f.read();
-//            }
-//            System.out.println(str);
-//            f.close();
-//        } catch (FileNotFoundException e) {
-//            e.printStackTrace();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//
-//        for(int i = 0; i < numPlants; i++) {
-//            //Create row items
-//            LinearLayout listItem = new LinearLayout(this);
-//            listItem.setOrientation(LinearLayout.HORIZONTAL);
-//            //List picture
-//            LinearLayout.LayoutParams imgParams = new LinearLayout.LayoutParams(150, 150);
-//            ImageView flowerImg = new ImageView(this);
-//            flowerImg.setLayoutParams(imgParams);
-//            flowerImg.setImageResource(R.drawable.flower);
-//
-//
-//            //List Text
-//            TextView name = new TextView(this);
-//            name.setLines(2);
-//            name.setText("PlantName" + (i+1) + "\nGenus" + (i+1) + "                                             ");
-//
-//            //Spacer view
-//            View spacer = new View(this);
-//            spacer.setLayoutParams(new LinearLayout.LayoutParams(0, 0, LinearLayout.LayoutParams.MATCH_PARENT));
-//
-//
-//            //Button
-//            imgParams = new LinearLayout.LayoutParams(100, 100);
-//            ImageButton imgB = new ImageButton(this);
-//            imgB.setLayoutParams(imgParams);
-//            imgB.setScaleType(ImageView.ScaleType.FIT_CENTER);
-//            imgB.setAdjustViewBounds(true);
-//            imgB.setPadding(0,0,0,0);
-//            imgB.setId(i);
-//            imgB.setImageResource(R.drawable.right_arrow);
-//
-//            //Set the button's onclick listener
-//            imgB.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    myPlantsButtonPress(v.getId());
-//                }
-//            });
-//
-//
-//            //Compile this row
-//            listItem.addView(flowerImg);
-//            listItem.addView(name);
-//            listItem.addView(spacer);
-//            listItem.addView(imgB);
-//            //Add this row to list
-//            plantList.addView(listItem);
-//        }
+        // Create the list objects
+
+        LinearLayout plantList = (LinearLayout) findViewById(R.id.plant_list);
+        String myPlants = "my_plants";
+        Set<String> plants = new TreeSet<String>();
+        FileInputStream f = null;
+        try {
+            f = openFileInput(myPlants);
+            int chr = f.read();
+            StringBuilder str = new StringBuilder("");
+            while (chr != -1) {
+                if (chr == '\n') {
+                    plants.add(str.toString());
+                    str = new StringBuilder("");
+                } else {
+                    str.append((char) chr);
+                }
+                chr = f.read();
+            }
+            f.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        for(String plant : plants) {
+            //Create row items
+            LinearLayout listItem = new LinearLayout(this);
+            listItem.setOrientation(LinearLayout.HORIZONTAL);
+            //List picture
+            LinearLayout.LayoutParams imgParams = new LinearLayout.LayoutParams(150, 150);
+            ImageView flowerImg = new ImageView(this);
+            flowerImg.setLayoutParams(imgParams);
+            flowerImg.setImageResource(R.drawable.flower);
+
+
+            //List Text
+            TextView name = new TextView(this);
+            StringBuilder text = new StringBuilder();
+            int splitIndex = plant.lastIndexOf(':');
+            text.append(plant.substring(0, splitIndex));
+            text.append("\nGenus: ");
+            text.append(plant.substring(splitIndex + 1));
+            name.setLines(2);
+            name.setText(text);
+
+            //Spacer view
+            View spacer = new View(this);
+            spacer.setLayoutParams(new LinearLayout.LayoutParams(0, 0, LinearLayout.LayoutParams.MATCH_PARENT));
+
+
+            //Button
+            imgParams = new LinearLayout.LayoutParams(100, 100);
+            ImageButton imgB = new ImageButton(this);
+            imgB.setLayoutParams(imgParams);
+            imgB.setScaleType(ImageView.ScaleType.FIT_CENTER);
+            imgB.setAdjustViewBounds(true);
+            imgB.setPadding(0,0,0,0);
+            imgB.setId(plant.hashCode());
+            imgB.setImageResource(R.drawable.right_arrow);
+
+            //Set the button's onclick listener
+            imgB.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    myPlantsButtonPress(v.getId());
+                }
+            });
+
+
+            //Compile this row
+            listItem.addView(flowerImg);
+            listItem.addView(name);
+            listItem.addView(spacer);
+            listItem.addView(imgB);
+            //Add this row to list
+            plantList.addView(listItem);
+        }
+    }
+
+    public void myPlantsButtonPress(int i) {
+        System.out.println("The " + i + "th button was clicked!");
     }
 
     private void dispatchTakePictureIntent() {
