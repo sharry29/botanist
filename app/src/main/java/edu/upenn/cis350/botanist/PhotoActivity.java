@@ -9,10 +9,12 @@ import android.support.v4.content.FileProvider;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -46,19 +48,17 @@ public class PhotoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_take_photo);
-        //dispatchTakePictureIntent();
-        //finish();
-
-        // Create the list objects
 
         getPlantNames();
         populateListWithFlowers();
 
-
-    }
-
-    public void myPlantsButtonPress(int i) {
-        System.out.println("The " + i + "th button was clicked!");
+        Button returnButton = (Button) findViewById(R.id.button5);
+        returnButton.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     private void getPlantNames() {
@@ -163,7 +163,23 @@ public class PhotoActivity extends AppCompatActivity {
                         "edu.upenn.cis350.botanist",
                         photoFile);
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                takePictureIntent.putExtra("flower", folderName);
                 startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+
+            }
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        System.out.print(data == null);
+        // Check which request we're responding to
+        if (requestCode == REQUEST_IMAGE_CAPTURE) {
+            if (resultCode == RESULT_OK) {
+                Toast t = Toast.makeText(getApplicationContext(),
+                                         "Picture saved.",
+                                         Toast.LENGTH_SHORT);
+                t.show();
             }
         }
     }
