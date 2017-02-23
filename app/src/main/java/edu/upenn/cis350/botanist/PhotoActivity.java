@@ -24,8 +24,13 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.TreeSet;
+
+import static android.R.attr.id;
+import static android.os.Build.ID;
 
 /**
  * Created by Harry on 2/16/17.
@@ -96,7 +101,8 @@ public class PhotoActivity extends AppCompatActivity {
             TextView name = new TextView(this);
             StringBuilder text = new StringBuilder();
             int splitIndex = plant.lastIndexOf(':');
-            text.append(plant.substring(0, splitIndex));
+            final String userName = plant.substring(0, splitIndex);
+            text.append(userName);
             text.append("\nGenus: ");
             text.append(plant.substring(splitIndex + 1));
             name.setLines(2);
@@ -105,6 +111,7 @@ public class PhotoActivity extends AppCompatActivity {
             //Spacer view
             View spacer = new View(this);
             spacer.setLayoutParams(new LinearLayout.LayoutParams(0, 0, 1));
+
 
 
             //Button
@@ -121,7 +128,7 @@ public class PhotoActivity extends AppCompatActivity {
             imgB.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    myPlantsButtonPress(v.getId());
+                    dispatchTakePictureIntent(userName);
                 }
             });
 
@@ -133,18 +140,18 @@ public class PhotoActivity extends AppCompatActivity {
             listItem.addView(imgB);
             //Add this row to list
             plantList.addView(listItem);
-            
+
         }
     }
 
-    private void dispatchTakePictureIntent() {
+    private void dispatchTakePictureIntent(String folderName) {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         // Ensure that there's a camera activity to handle the intent
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
             // Create the File where the photo should go
             File photoFile = null;
             try {
-                photoFile = createImageFile();
+                photoFile = createImageFile(folderName);
             } catch (IOException ex) {
                 // Error occurred while creating the File
                 System.out.println(ex);
@@ -162,15 +169,17 @@ public class PhotoActivity extends AppCompatActivity {
     }
 
 
-    private File createImageFile() throws IOException {
+    private File createImageFile(String folderName) throws IOException {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date());
-        String imageFileName = "JPEG_" + timeStamp + "_";
+        String imageFileName = folderName + timeStamp + "_";
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File plantDir = new File(storageDir.getAbsolutePath() + "/" + folderName);
+        plantDir.mkdir();
         File image = File.createTempFile(
                 imageFileName,  /* prefix */
                 ".jpg",         /* suffix */
-                storageDir      /* directory */
+                plantDir      /* directory */
         );
 
         // Save a file: path for use with ACTION_VIEW intents
