@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageButton;
@@ -33,6 +34,8 @@ import java.util.TreeSet;
 public class PhotoActivity extends AppCompatActivity {
     String mCurrentPhotoPath;
     static final int REQUEST_IMAGE_CAPTURE = 1;
+    static final String myPlants = "my_plants";
+    static final Set<String> plants = new TreeSet<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,9 +46,17 @@ public class PhotoActivity extends AppCompatActivity {
 
         // Create the list objects
 
-        LinearLayout plantList = (LinearLayout) findViewById(R.id.plant_list);
-        String myPlants = "my_plants";
-        Set<String> plants = new TreeSet<String>();
+        getPlantNames();
+        populateListWithFlowers();
+
+
+    }
+
+    public void myPlantsButtonPress(int i) {
+        System.out.println("The " + i + "th button was clicked!");
+    }
+
+    private void getPlantNames() {
         FileInputStream f = null;
         try {
             f = openFileInput(myPlants);
@@ -66,13 +77,16 @@ public class PhotoActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
 
+    private void populateListWithFlowers() {
+        LinearLayout plantList = (LinearLayout) findViewById(R.id.plant_list);
         for(String plant : plants) {
             //Create row items
             LinearLayout listItem = new LinearLayout(this);
             listItem.setOrientation(LinearLayout.HORIZONTAL);
             //List picture
-            LinearLayout.LayoutParams imgParams = new LinearLayout.LayoutParams(150, 150);
+            LinearLayout.LayoutParams imgParams = new LinearLayout.LayoutParams(300, 300);
             ImageView flowerImg = new ImageView(this);
             flowerImg.setLayoutParams(imgParams);
             flowerImg.setImageResource(R.drawable.flower);
@@ -90,11 +104,11 @@ public class PhotoActivity extends AppCompatActivity {
 
             //Spacer view
             View spacer = new View(this);
-            spacer.setLayoutParams(new LinearLayout.LayoutParams(0, 0, LinearLayout.LayoutParams.MATCH_PARENT));
+            spacer.setLayoutParams(new LinearLayout.LayoutParams(0, 0, 1));
 
 
             //Button
-            imgParams = new LinearLayout.LayoutParams(100, 100);
+            imgParams = new LinearLayout.LayoutParams(200, 200);
             ImageButton imgB = new ImageButton(this);
             imgB.setLayoutParams(imgParams);
             imgB.setScaleType(ImageView.ScaleType.FIT_CENTER);
@@ -119,11 +133,8 @@ public class PhotoActivity extends AppCompatActivity {
             listItem.addView(imgB);
             //Add this row to list
             plantList.addView(listItem);
+            
         }
-    }
-
-    public void myPlantsButtonPress(int i) {
-        System.out.println("The " + i + "th button was clicked!");
     }
 
     private void dispatchTakePictureIntent() {
