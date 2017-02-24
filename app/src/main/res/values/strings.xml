@@ -5,7 +5,11 @@
         <item>Monitor Plants</item>
         <item>Take a Photo</item>
         <item>Add New Plant</item>
-        <item>View Plant Types</item>
         <item>Settings</item>
+    </string-array>
+    <string-array name="notification_frequency_array">
+        <item>Hourly</item>
+        <item>Daily</item>
+        <item>Never</item>
     </string-array>
 </resources>

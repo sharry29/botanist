@@ -81,6 +81,8 @@ public class MainActivity extends AppCompatActivity {
                     case "View Plant Types":
                         break;
                     case "Settings":
+                        Intent userSettingsIntent = new Intent(getApplicationContext(), UserSettingsActivity.class);
+                        startActivity(userSettingsIntent);
                         break;
                 }
             }
