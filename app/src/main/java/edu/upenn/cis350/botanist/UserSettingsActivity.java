@@ -28,29 +28,36 @@ public class UserSettingsActivity extends AppCompatActivity {
 
         userSettings = getSharedPreferences(USER_SETTINGS_PREFS_NAME, Context.MODE_PRIVATE);
 
+        // Sets up the spinner with notification frequency preferences
         spinner = (Spinner) findViewById(R.id.notification_frequency_spinner);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.notification_frequency_array, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
 
+        // Gets all of the Edit Text views
         firstNameET = (EditText) findViewById(R.id.first_name_edit_text);
-        firstNameET.setText(userSettings.getString("firstName", ""));
         lastNameET = (EditText) findViewById(R.id.last_name_edit_text);
-        lastNameET.setText(userSettings.getString("lastName", ""));
         cityET = (EditText) findViewById(R.id.city_edit_text);
-        cityET.setText(userSettings.getString("city", ""));
         stateET = (EditText) findViewById(R.id.state_edit_text);
-        stateET.setText(userSettings.getString("state", ""));
         countryET = (EditText) findViewById(R.id.country_edit_text);
+
+        // Presets the values of the Edit Text views with data from shared preferences if they exist
+        firstNameET.setText(userSettings.getString("firstName", ""));
+        lastNameET.setText(userSettings.getString("lastName", ""));
+        cityET.setText(userSettings.getString("city", ""));
+        stateET.setText(userSettings.getString("state", ""));
         countryET.setText(userSettings.getString("country", ""));
 
+        // Presets the notification frequency of the spinner
         String freqPref = userSettings.getString("notificationFrequency", null);
         if (freqPref != null && (freqPref.equals("Hourly") || freqPref.equals("Daily") || freqPref.equals("Never"))) {
-            spinner.setSelection(((ArrayAdapter) spinner.getAdapter()).getPosition(freqPref));
+            spinner.setSelection(adapter.getPosition(freqPref));
         }
     }
 
+
+    // Adds the values from the Edit Text views to the user settings shared preferences
     public void onButtonPress(View view) {
         SharedPreferences.Editor editor = userSettings.edit();
 
@@ -60,7 +67,7 @@ public class UserSettingsActivity extends AppCompatActivity {
         editor.putString("state", stateET.getText().toString());
         editor.putString("country", countryET.getText().toString());
         editor.putString("notificationFrequency", spinner.getSelectedItem().toString());
-        editor.commit();
+        editor.apply();
 
         Toast.makeText(getApplication(), "User Settings saved successfully.", Toast.LENGTH_SHORT).show();
         finish();
