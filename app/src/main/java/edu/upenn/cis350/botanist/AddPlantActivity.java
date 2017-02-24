@@ -18,6 +18,10 @@ import java.io.IOException;
 
 public class AddPlantActivity extends AppCompatActivity {
 
+    /**
+     * Start the AddPlantActivity. Provide the list of plants to the AutoCompleteView.
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,10 +33,20 @@ public class AddPlantActivity extends AppCompatActivity {
         textView.setAdapter(adapter);
     }
 
+    /**
+     * List of plants used for the autocomplete textView. This is just meant to check the functionality
+     * until we find a way to add and store more plants.
+     */
     private static final String[] PLANTS = new String[] {
             "Sunflower", "Rose", "Carnation", "Tulip", "Daffodil"
     };
 
+    /**
+     * Checks to see if our collection of plants includes the plant the user wants to add. If so,
+     * redirect the user to the Wikipedia page for the plant if they click the description button.
+     * If we do not have this plant on record, let the user know.
+     * @param view
+     */
     public void checkDescription(View view) {
         AutoCompleteTextView textView = (AutoCompleteTextView) findViewById(R.id.plant_list);
         String plant = String.valueOf(textView.getText());
@@ -46,6 +60,11 @@ public class AddPlantActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Add the user's new plant to internal storage. Plants are stored in the format "Plant_Name:Plant_Type".
+     * Each plant is on its own individual line in the file.
+     * @param view
+     */
     public void addNewPlant(View view) {
         TextView plantText = (TextView) findViewById(R.id.plant_name);
         String plantName = String.valueOf(plantText.getText());
