@@ -47,13 +47,12 @@ public class PhotoActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_take_photo);
+        setContentView(R.layout.activity_take_photo);
 
         getPlantNames();
         populateListWithFlowers();
 
-        Button returnButton = null;
-        //Button returnButton = (Button) findViewById(R.id.button5);
+        Button returnButton = (Button) findViewById(R.id.button5);
         returnButton.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
