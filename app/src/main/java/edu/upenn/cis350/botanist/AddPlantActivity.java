@@ -5,6 +5,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -14,11 +17,17 @@ import android.widget.AutoCompleteTextView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 public class AddPlantActivity extends AppCompatActivity {
+    String mCurrentPhotoPath;
+    static final int REQUEST_IMAGE_CAPTURE = 1;
 
     /**
      * Start the AddPlantActivity. Provide the list of plants to the AutoCompleteView.
@@ -68,7 +77,7 @@ public class AddPlantActivity extends AppCompatActivity {
      * @param view
      */
     public void addNewPlant(View view) {
-        /*TextView plantText = (TextView) findViewById(R.id.plant_name);
+        TextView plantText = (TextView) findViewById(R.id.plant_name);
         String plantName = String.valueOf(plantText.getText());
         TextView typeText = (TextView) findViewById(R.id.plant_list);
         String plantType = String.valueOf(typeText.getText());
@@ -86,36 +95,86 @@ public class AddPlantActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Toast toast = Toast.makeText(getApplicationContext(), "Your plant has been successfully added!", Toast.LENGTH_LONG);
-        toast.show();*/
-        //startActivity(new Intent(getApplicationContext(), MainActivity.class));
 
-        promptForPicture();
-
-
-        //System.out.println("The user would like to store PlantName: " + plantName + " PlantType: " + plantType);
+        promptForPicture(plantName);
     }
 
-    private void promptForPicture() {
+    private void promptForPicture(final String plantName) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("Do you want to take a picture of this plant?")
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        takePicture();
-                    }
-                })
                 .setNegativeButton("No", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                    }
+                })
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        takePicture(plantName);
                     }
                 });
         AlertDialog pictureDialog = builder.create();
         pictureDialog.show();
     }
 
-    private void takePicture() {
-        System.out.println("Taking picture");
+    private void takePicture(String folderName) {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        // Ensure that there's a camera activity to handle the intent
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            // Create the File where the photo should go
+            File photoFile = null;
+            try {
+                photoFile = createImageFile(folderName);
+            } catch (IOException ex) {
+                // Error occurred while creating the File
+                System.out.println(ex);
+                return;
+            }
+            // Continue only if the File was successfully created
+            if (photoFile != null) {
+                Uri photoURI = FileProvider.getUriForFile(this,
+                        "edu.upenn.cis350.botanist",
+                        photoFile);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                takePictureIntent.putExtra("flower", folderName);
+                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+
+            }
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        System.out.print(data == null);
+        // Check which request we're responding to
+        if (requestCode == REQUEST_IMAGE_CAPTURE) {
+            if (resultCode == RESULT_OK) {
+                Toast t = Toast.makeText(getApplicationContext(),
+                        "Picture saved.",
+                        Toast.LENGTH_SHORT);
+                t.show();
+            }
+        }
         startActivity(new Intent(getApplicationContext(), MainActivity.class));
     }
+
+
+    private File createImageFile(String folderName) throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date());
+        String imageFileName = folderName + timeStamp + "_";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File plantDir = new File(storageDir.getAbsolutePath() + "/" + folderName);
+        plantDir.mkdir();
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                plantDir      /* directory */
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        mCurrentPhotoPath = image.getAbsolutePath();
+        return image;
+    }
+
 }
 
