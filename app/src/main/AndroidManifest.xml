@@ -36,6 +36,7 @@
         <activity android:name=".AddPlantActivity" />
         <activity android:name=".MyPlantsActivity" />
         <activity android:name=".PhotoActivity" />
+        <activity android:name=".ViewPlantActivity"></activity>
         <activity android:name=".UserSettingsActivity"></activity>
     </application>
 

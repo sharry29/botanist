@@ -1,8 +1,13 @@
 package edu.upenn.cis350.botanist;
 
 import android.app.ActionBar;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.View;
@@ -19,10 +24,14 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Created by Ben on 2/16/2017.
@@ -38,8 +47,7 @@ public class MyPlantsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_plants);
 
-        //Temporary until we read the length of data structure
-        //numPlants = 25;
+
         numPlants = plantList.size();
 
         //Create the list objects
@@ -48,41 +56,51 @@ public class MyPlantsActivity extends AppCompatActivity {
         for(int i = 0; i < numPlants; i++) {
             //Create row items
             RelativeLayout listItem = new RelativeLayout(this);
-            //listItem.setLayoutParams(RelativeLayout.LayoutParams.)
-            //listItem.setOrientation(LinearLayout.HORIZONTAL);
 
-            //List picture -- Eventually should display an image that the user takes for the plant
+
+            //List item picture - Defaults to colorful flower if there is no user img
+            File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+            File plantDir = new File(storageDir.getAbsolutePath() + "/" + plantList.get(i).getName());
+            File latestPic = null;
+            try {
+               latestPic = findLatestImage(i, plantDir);
+            } catch(Exception e) {
+                System.out.println("Oh no! Parse Exception.");
+                e.printStackTrace();
+            }
+
+
+            //Draw image
             RelativeLayout.LayoutParams imgParams = new RelativeLayout.LayoutParams(150, 150);
             imgParams.addRule(RelativeLayout.ALIGN_LEFT);
             ImageView flowerImg = new ImageView(this);
             int id = View.generateViewId();
             flowerImg.setId(id);
             flowerImg.setLayoutParams(imgParams);
-            flowerImg.setImageResource(R.drawable.flower);
+
+            if (latestPic == null) {
+                //Display default picture
+                flowerImg.setImageResource(R.drawable.flower);
+            } else {
+                //Uri uri = Uri.fromFile(latestPic);
+                //flowerImg.setImageURI(uri);
+                Bitmap flowerPicture = BitmapFactory.decodeFile(latestPic.getAbsolutePath());
+                flowerImg.setImageBitmap(flowerPicture);
+            }
 
 
             //List Text
             TextView name = new TextView(this);
-            //name.setGravity(Gravity.LEFT);
              RelativeLayout.LayoutParams textParams = new RelativeLayout.LayoutParams(700, 100);
             textParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
             textParams.addRule(RelativeLayout.RIGHT_OF, id);
-            //textParams.setPaddingRelative(600, 0, 0, 0);
-            //Left padding = width of the image
-            name.setPaddingRelative(150, 0, 0, 0);
+
+            name.setPaddingRelative(200, 0, 0, 0);
 
 
             name.setText(plantList.get(i).getName() + "\n" + plantList.get(i).getType() + "                             ");
             //name.setLayoutParams(textParams);
             name.setLines(2);
-
-
-            //Spacer view
-            //View spacer = new View(this);
-            //ViewGroup.LayoutParams space = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT );
-            //space.height = ViewGroup.LayoutParams.MATCH_PARENT + 3;
-            //spacer.setBackgroundColor(Color.BLACK);
-
 
 
             //Button
@@ -108,16 +126,54 @@ public class MyPlantsActivity extends AppCompatActivity {
             //Compile this row
             listItem.addView(flowerImg);
             listItem.addView(name);
-            //listItem.addView(spacer);
             listItem.addView(imgB);
+
             //Add this row to list
             fullList.addView(listItem);
         }
     }
 
+    private File findLatestImage(int i, File plantDir) throws ParseException {
+        File[] jpg = plantDir.listFiles(new FilenameFilter() {
+            public boolean accept(File plantDir, String filename)
+            { System.out.println(filename.toLowerCase()); return filename.toLowerCase().endsWith(".jpg"); }
+        } );
+
+
+            //If there are any user jpgs for this plant, display the most recent one
+            File latestPic = null;
+            Date latestDate = new Date(0);
+            if (jpg != null) {
+                SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd_HHmmss");
+                //Check the whole list of .jpg files from the directory
+                for (File img : jpg) {
+                    //Roundabout way to find the DATETIME substring from filename (open to changes here)
+                    String thisDateString =
+                            img.getName().substring
+                                    (plantList.get(i).getName().length(),
+                                            plantList.get(i).getName().length() + 15);
+                    //DEBUGGING
+                    System.out.println("DATE STRING: " + thisDateString);
+                    Date thisDate = format.parse(thisDateString);
+                    if (thisDate.compareTo(latestDate) > 0) {
+                        latestPic = img;
+                        latestDate = thisDate;
+                    }
+                    //DEBUGGING
+                    System.out.println("LATEST DATE    :   " + latestDate);
+                }
+                return latestPic;
+            } else {
+                return null;
+            }
+    }
+
     public void myPlantsButtonPress(int i) {
         System.out.println("You clicked button number " + (i + 1) + "!");
         System.out.println("Name: " + plantList.get(i).getName() + " Type: " + plantList.get(i).getType());
+        Intent viewPlantIntent = new Intent(getApplicationContext(), ViewPlantActivity.class);
+        viewPlantIntent.putExtra("Plant", plantList.get(i));
+        startActivity(viewPlantIntent);
     }
 
 
@@ -137,8 +193,10 @@ public class MyPlantsActivity extends AppCompatActivity {
             System.out.println("Found " + plantList.size());
             in.close();
         } catch (FileNotFoundException e) {
+            System.out.println("Plant file not found.");
             e.printStackTrace();
         } catch (IOException e) {
+            System.out.println("IOException in readPlantsFromFile() in MyPlantsActivity");
             e.printStackTrace();
         }
     }
@@ -146,5 +204,6 @@ public class MyPlantsActivity extends AppCompatActivity {
 }
 
 /*
-I need to be able to call a sorted list of plants by Name, Age, Height, Genus, etc. Ideally array of some kind
+I need to be able to call a sorted list of plants by Name, Age, Height, Genus, etc. Ideally array of some kind.
+This is just so the user can sort the plants however they want.
  */

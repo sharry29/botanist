@@ -1,10 +1,14 @@
 package edu.upenn.cis350.botanist;
 
+import java.io.Serializable;
+
 /**
  * Created by Ben on 2/23/2017.
+ * Serializable lets you pass Plant objects between
+ * activities by using intent.putExtra("Plant", thePlantObject)
  */
 
-public class Plant {
+public class Plant implements Serializable {
 
     private String name;
     private String type;

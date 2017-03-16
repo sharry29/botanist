@@ -4,6 +4,7 @@
     android:layout_height="match_parent"
     android:weightSum="1">
 
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -26,6 +27,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
                 android:id="@+id/plant_genus" />
+
+            <TextView
+                android:text="TextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/plant_description" />
 
             <HorizontalScrollView
                 android:layout_width="match_parent"
