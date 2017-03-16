@@ -1,6 +1,8 @@
 package edu.upenn.cis350.botanist;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
@@ -66,7 +68,7 @@ public class AddPlantActivity extends AppCompatActivity {
      * @param view
      */
     public void addNewPlant(View view) {
-        TextView plantText = (TextView) findViewById(R.id.plant_name);
+        /*TextView plantText = (TextView) findViewById(R.id.plant_name);
         String plantName = String.valueOf(plantText.getText());
         TextView typeText = (TextView) findViewById(R.id.plant_list);
         String plantType = String.valueOf(typeText.getText());
@@ -85,10 +87,35 @@ public class AddPlantActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         Toast toast = Toast.makeText(getApplicationContext(), "Your plant has been successfully added!", Toast.LENGTH_LONG);
-        toast.show();
+        toast.show();*/
+        //startActivity(new Intent(getApplicationContext(), MainActivity.class));
+
+        promptForPicture();
+
+
+        //System.out.println("The user would like to store PlantName: " + plantName + " PlantType: " + plantType);
+    }
+
+    private void promptForPicture() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Do you want to take a picture of this plant?")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        takePicture();
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                    }
+                });
+        AlertDialog pictureDialog = builder.create();
+        pictureDialog.show();
+    }
+
+    private void takePicture() {
+        System.out.println("Taking picture");
         startActivity(new Intent(getApplicationContext(), MainActivity.class));
-
-
-        System.out.println("The user would like to store PlantName: " + plantName + " PlantType: " + plantType);
     }
 }
+
