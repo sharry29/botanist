@@ -8,13 +8,7 @@ import android.graphics.Bitmap.Config;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 
-public class GifFactory {
-
-
-
-}
-
-class AnimatedGifEncoder {
+public class AnimatedGifEncoder {
 
     protected int width; // image size
 
