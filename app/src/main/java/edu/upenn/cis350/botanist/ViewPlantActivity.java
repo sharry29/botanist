@@ -11,6 +11,9 @@ import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.PopupMenu;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.HorizontalScrollView;
@@ -67,16 +70,18 @@ public class ViewPlantActivity extends AppCompatActivity{
         title.setText(plant.getName());
         title.setTextSize(25);
         title.setTypeface(Typeface.DEFAULT_BOLD);
+        title.setPadding(25,0, 0, 0);
         genus.setText(plant.getType());
         genus.setTextSize(15);
         genus.setTypeface(Typeface.defaultFromStyle(Typeface.ITALIC));
+        genus.setPadding(25, 0, 0, 0);
 
 
         //Add a Description box. Obviously this is just filler text, will replace with plant info
         //when we find a plant API (or download a plant dictionary)
         TextView description = (TextView) findViewById(R.id.plant_description);
         description.setText("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla consectetur aliquam ligula sit amet pretium. Aliquam ante magna, venenatis sit amet eros quis, mollis imperdiet mi. Fusce eget libero sed arcu aliquet vehicula a vel leo. Duis a faucibus augue. Cras ac varius velit. Donec a blandit nunc. In bibendum, sem at suscipit ullamcorper, nibh magna consequat ante, a pellentesque ante tellus et urna. Maecenas non metus sollicitudin, blandit sapien at, pellentesque odio. Integer eget mauris bibendum, blandit ante ut, scelerisque leo. Vivamus ut ex urna. Mauris porttitor neque nec sagittis mollis. Donec malesuada sit amet nibh nec placerat. Sed ac semper lectus.");
-
+        description.setPadding(100, 0, 0, 0);
         //viewPlantLayout.addView(description);
 
         //Create horizontal-scroll images from jpgs
@@ -132,18 +137,6 @@ public class ViewPlantActivity extends AppCompatActivity{
         });
         return jpg;
     }
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     /*All following code stolen from PhotoActivity (Modified slightly)*/
@@ -204,5 +197,27 @@ public class ViewPlantActivity extends AppCompatActivity{
         // Save a file: path for use with ACTION_VIEW intents
         //mCurrentPhotoPath = image.getAbsolutePath();
         return image;
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.view_plant_options_menu, menu);
+        menu.add("Edit Plant");
+        menu.add("App Settings");
+        return true;
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selectio
+
+        if (item.getTitle().equals("App Settings")) {
+            Intent settingsIntent = new Intent(getApplicationContext(), UserSettingsActivity.class);
+            startActivity(settingsIntent);
+        }
+        return true;
     }
 }
