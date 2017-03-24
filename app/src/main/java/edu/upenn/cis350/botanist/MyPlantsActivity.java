@@ -32,6 +32,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Set;
+import java.util.TreeMap;
+import java.util.TreeSet;
 
 /**
  * Created by Ben on 2/16/2017.
@@ -143,6 +146,7 @@ public class MyPlantsActivity extends AppCompatActivity {
             //If there are any user jpgs for this plant, display the most recent one
             File latestPic = null;
             Date latestDate = new Date(0);
+            TreeMap<Date, File> photoDates = new TreeMap<Date, File>();
             if (jpg != null) {
                 SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd_HHmmss");
                 //Check the whole list of .jpg files from the directory
@@ -152,17 +156,14 @@ public class MyPlantsActivity extends AppCompatActivity {
                             img.getName().substring
                                     (plantList.get(i).getName().length(),
                                             plantList.get(i).getName().length() + 15);
-                    //DEBUGGING
-                    System.out.println("DATE STRING: " + thisDateString);
+//                    //DEBUGGING
+//                    System.out.println("DATE STRING: " + thisDateString);
                     Date thisDate = format.parse(thisDateString);
-                    if (thisDate.compareTo(latestDate) > 0) {
-                        latestPic = img;
-                        latestDate = thisDate;
-                    }
-                    //DEBUGGING
-                    System.out.println("LATEST DATE    :   " + latestDate);
+                    photoDates.put(thisDate, img);
+//                    //DEBUGGING
+//                    System.out.println("LATEST DATE    :   " + latestDate);
                 }
-                return latestPic;
+                return photoDates.get(photoDates.lastKey());
             } else {
                 return null;
             }
