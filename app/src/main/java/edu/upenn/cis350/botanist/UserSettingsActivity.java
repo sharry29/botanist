@@ -51,7 +51,8 @@ public class UserSettingsActivity extends AppCompatActivity {
 
         // Presets the notification frequency of the spinner
         String freqPref = userSettings.getString("notificationFrequency", null);
-        if (freqPref != null && (freqPref.equals("Hourly") || freqPref.equals("Daily") || freqPref.equals("Never"))) {
+        if (freqPref != null && (freqPref.equals("Hourly") || freqPref.equals("Daily") ||
+                freqPref.equals("Never"))) {
             spinner.setSelection(adapter.getPosition(freqPref));
         }
     }
@@ -69,8 +70,21 @@ public class UserSettingsActivity extends AppCompatActivity {
         editor.putString("notificationFrequency", spinner.getSelectedItem().toString());
         editor.apply();
 
-        Toast.makeText(getApplication(), "User Settings saved successfully.", Toast.LENGTH_SHORT).show();
+        editor.putBoolean("notificationsScheduled", scheduleNotifications());
+
+        Toast.makeText(getApplication(), "User Settings saved successfully.",
+                Toast.LENGTH_SHORT).show();
         finish();
+    }
+
+    private boolean scheduleNotifications() {
+        // Sets a repeating notification unless the user specified not to
+        String notificationFrequency = spinner.getSelectedItem().toString();
+        if (notificationFrequency.equals("Never")) return false;
+
+        NotificationPublisher.setRepeatingAlarm(this);
+
+        return true;
     }
 
 }

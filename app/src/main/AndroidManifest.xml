@@ -26,7 +26,9 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-        <activity android:name=".MainActivity">
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -35,10 +37,26 @@
         </activity>
         <activity android:name=".AddPlantActivity" />
         <activity android:name=".MyPlantsActivity" />
-        <activity android:name=".PhotoActivity" />
+        <activity
+            android:name=".PhotoActivity"
+            android:parentActivityName=".MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
         <activity android:name=".ViewPlantActivity"></activity>
         <activity android:name=".UserSettingsActivity"></activity>
         <activity android:name=".GifActivity"></activity>
+
+        <uses-permission android:name="android.permission.WAKE_LOCK" />
+        <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
+        <receiver android:name=".NotificationPublisher" />
+        <receiver android:name=".BootReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>
