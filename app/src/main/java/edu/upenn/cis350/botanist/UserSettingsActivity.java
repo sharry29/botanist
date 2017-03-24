@@ -71,6 +71,7 @@ public class UserSettingsActivity extends AppCompatActivity {
         editor.apply();
 
         editor.putBoolean("notificationsScheduled", scheduleNotifications());
+        editor.putBoolean("settingsSaved", true);
 
         Toast.makeText(getApplication(), "User Settings saved successfully.",
                 Toast.LENGTH_SHORT).show();
