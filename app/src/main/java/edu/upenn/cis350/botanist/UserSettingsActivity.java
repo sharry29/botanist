@@ -10,6 +10,8 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import java.util.Iterator;
+
 public class UserSettingsActivity extends AppCompatActivity {
     public static final String USER_SETTINGS_PREFS_NAME = "UserSettingsPrefs";
 
@@ -57,7 +59,6 @@ public class UserSettingsActivity extends AppCompatActivity {
         }
     }
 
-
     // Adds the values from the Edit Text views to the user settings shared preferences
     public void onButtonPress(View view) {
         SharedPreferences.Editor editor = userSettings.edit();
@@ -68,10 +69,11 @@ public class UserSettingsActivity extends AppCompatActivity {
         editor.putString("state", stateET.getText().toString());
         editor.putString("country", countryET.getText().toString());
         editor.putString("notificationFrequency", spinner.getSelectedItem().toString());
-        editor.apply();
 
         editor.putBoolean("notificationsScheduled", scheduleNotifications());
         editor.putBoolean("settingsSaved", true);
+
+        editor.apply();
 
         Toast.makeText(getApplication(), "User Settings saved successfully.",
                 Toast.LENGTH_SHORT).show();
