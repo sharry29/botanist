@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="1">
+
+    <TextView
+        android:text="Tap on a picture to delete it!"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:id="@+id/textView5"
+        android:layout_weight="1.33" />
+
+    <GridView
+        android:id="@+id/current_pictures"
+        android:layout_width="match_parent"
+        android:layout_height="487dp"
+        android:columnWidth="90dp"
+        android:numColumns="auto_fit"
+        android:verticalSpacing="10dp"
+        android:horizontalSpacing="10dp"
+        android:stretchMode="columnWidth"
+        android:gravity="center"
+        android:outlineProvider="background"
+        android:layout_weight="1.15" />
+
+</LinearLayout>
