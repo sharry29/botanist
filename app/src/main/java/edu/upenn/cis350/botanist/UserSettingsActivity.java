@@ -10,6 +10,8 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import java.util.Iterator;
+
 public class UserSettingsActivity extends AppCompatActivity {
     public static final String USER_SETTINGS_PREFS_NAME = "UserSettingsPrefs";
 
@@ -51,11 +53,11 @@ public class UserSettingsActivity extends AppCompatActivity {
 
         // Presets the notification frequency of the spinner
         String freqPref = userSettings.getString("notificationFrequency", null);
-        if (freqPref != null && (freqPref.equals("Hourly") || freqPref.equals("Daily") || freqPref.equals("Never"))) {
+        if (freqPref != null && (freqPref.equals("Hourly") || freqPref.equals("Daily") ||
+                freqPref.equals("Never"))) {
             spinner.setSelection(adapter.getPosition(freqPref));
         }
     }
-
 
     // Adds the values from the Edit Text views to the user settings shared preferences
     public void onButtonPress(View view) {
@@ -67,10 +69,25 @@ public class UserSettingsActivity extends AppCompatActivity {
         editor.putString("state", stateET.getText().toString());
         editor.putString("country", countryET.getText().toString());
         editor.putString("notificationFrequency", spinner.getSelectedItem().toString());
+
+        editor.putBoolean("notificationsScheduled", scheduleNotifications());
+        editor.putBoolean("settingsSaved", true);
+
         editor.apply();
 
-        Toast.makeText(getApplication(), "User Settings saved successfully.", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplication(), "User Settings saved successfully.",
+                Toast.LENGTH_SHORT).show();
         finish();
+    }
+
+    private boolean scheduleNotifications() {
+        // Sets a repeating notification unless the user specified not to
+        String notificationFrequency = spinner.getSelectedItem().toString();
+        if (notificationFrequency.equals("Never")) return false;
+
+        NotificationPublisher.setRepeatingAlarm(this);
+
+        return true;
     }
 
 }

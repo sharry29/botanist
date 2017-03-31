@@ -7,6 +7,7 @@ import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
@@ -29,6 +30,7 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
@@ -119,7 +121,20 @@ public class ViewPlantActivity extends AppCompatActivity{
         });
         viewPlantLayout.addView(takePicture);
 
-        //Add a Take a Picture box
+        Button viewGIF = new Button(this);
+        viewGIF.setText("View GIF of Plant Growth");
+        viewGIF.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent GifIntent = new Intent(getApplicationContext(), GifActivity.class);
+                GifIntent.putExtra("images", images);
+                GifIntent.putExtra("Plant", plant.getName());
+                startActivity(GifIntent);
+            }
+        });
+        viewPlantLayout.addView(viewGIF);
+
+        //Add a Take a Picture bo
 
     }
 
