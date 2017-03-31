@@ -83,7 +83,7 @@ public class ViewPlantActivity extends AppCompatActivity{
         //when we find a plant API (or download a plant dictionary)
         TextView description = (TextView) findViewById(R.id.plant_description);
         description.setText("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla consectetur aliquam ligula sit amet pretium. Aliquam ante magna, venenatis sit amet eros quis, mollis imperdiet mi. Fusce eget libero sed arcu aliquet vehicula a vel leo. Duis a faucibus augue. Cras ac varius velit. Donec a blandit nunc. In bibendum, sem at suscipit ullamcorper, nibh magna consequat ante, a pellentesque ante tellus et urna. Maecenas non metus sollicitudin, blandit sapien at, pellentesque odio. Integer eget mauris bibendum, blandit ante ut, scelerisque leo. Vivamus ut ex urna. Mauris porttitor neque nec sagittis mollis. Donec malesuada sit amet nibh nec placerat. Sed ac semper lectus.");
-        description.setPadding(100, 0, 0, 0);
+        description.setPadding(25, 0, 0, 0);
         //viewPlantLayout.addView(description);
 
         //Create horizontal-scroll images from jpgs
@@ -219,7 +219,7 @@ public class ViewPlantActivity extends AppCompatActivity{
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.view_plant_options_menu, menu);
-        menu.add("Edit Plant");
+        menu.add("Manage Plant Pictures");
         menu.add("App Settings");
         return true;
     }
@@ -232,6 +232,10 @@ public class ViewPlantActivity extends AppCompatActivity{
         if (item.getTitle().equals("App Settings")) {
             Intent settingsIntent = new Intent(getApplicationContext(), UserSettingsActivity.class);
             startActivity(settingsIntent);
+        } else if (item.getTitle().equals("Manage Plant Pictures")) {
+            Intent managePicsIntent = new Intent(getApplicationContext(), ManagePicturesActivity.class);
+            managePicsIntent.putExtra("Plant", plant);
+            startActivity(managePicsIntent);
         }
         return true;
     }
