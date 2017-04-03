@@ -17,6 +17,8 @@ import android.widget.AutoCompleteTextView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.database.*;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -28,6 +30,9 @@ import java.util.Locale;
 public class AddPlantActivity extends AppCompatActivity {
     String mCurrentPhotoPath;
     static final int REQUEST_IMAGE_CAPTURE = 1;
+    final FirebaseDatabase database = FirebaseDatabase.getInstance();
+    DatabaseReference ref = database.getReference().child("Asparagus");
+
 
     /**
      * Start the AddPlantActivity. Provide the list of plants to the AutoCompleteView.
@@ -36,6 +41,7 @@ public class AddPlantActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        System.out.println(ref);
         setContentView(R.layout.activity_add_plant);
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String> (this,

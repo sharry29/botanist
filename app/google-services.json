@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "385807803121",
+    "firebase_url": "https://cis350-botanist.firebaseio.com",
+    "project_id": "cis350-botanist",
+    "storage_bucket": "cis350-botanist.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:385807803121:android:974397e8d1bcf1c9",
+        "android_client_info": {
+          "package_name": "edu.upenn.cis350.botanist"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "385807803121-qtau1grrcdsbqd5h5ssn2v22omqd4u2u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC5M3n7NI3jxA3kjrsqzC5jd8wfnBYZan0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
