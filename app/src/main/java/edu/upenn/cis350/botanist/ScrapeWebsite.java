@@ -18,7 +18,7 @@ public class ScrapeWebsite {
     public static FirebaseDatabase db;
 
     public static void main(String[] args) {
-        FirebaseDatabase d = FirebaseDatabase.getInstance("https://cis350-botanist.firebaseio.com/");
+        //FirebaseDatabase d = FirebaseDatabase.getInstance("https://cis350-botanist.firebaseio.com/");
         URLGetter g = new URLGetter("https://bonnieplants.com");
         try {
             writer = new FileWriter(new File("plant_info.txt"), false);
@@ -108,7 +108,6 @@ public class ScrapeWebsite {
     }
 
     private static void writeInfo(String url) {
-        DatabaseReference plantRef = db.getReference("Plant");
         URLGetter g = new URLGetter(url);
         String html = g.getContents();
         if (url.equals("https://bonnieplants.com/product/custard-wax-bean/")) {
@@ -127,7 +126,6 @@ public class ScrapeWebsite {
                     }
                 }
                 System.out.println(pleaseWork);
-                plantRef.setValue(pleaseWork);
                 writer.append(pleaseWork + "\n" + url +"\n");
                 findLight(html);
                 writer.append("\n\n");
