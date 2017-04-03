@@ -3,17 +3,22 @@ package edu.upenn.cis350.botanist;
 import java.io.*;
 import java.util.List;
 import java.util.regex.*;
+import com.google.firebase.*;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 
 /**
  * Created by kathdix on 3/23/17.
  */
 
 public class ScrapeWebsite {
-
     public static List<String> urls;
     public static Writer writer;
+    public static FirebaseDatabase db;
 
     public static void main(String[] args) {
+        FirebaseDatabase d = FirebaseDatabase.getInstance("https://cis350-botanist.firebaseio.com/");
         URLGetter g = new URLGetter("https://bonnieplants.com");
         try {
             writer = new FileWriter(new File("plant_info.txt"), false);
@@ -103,6 +108,7 @@ public class ScrapeWebsite {
     }
 
     private static void writeInfo(String url) {
+        DatabaseReference plantRef = db.getReference("Plant");
         URLGetter g = new URLGetter(url);
         String html = g.getContents();
         if (url.equals("https://bonnieplants.com/product/custard-wax-bean/")) {
@@ -121,6 +127,7 @@ public class ScrapeWebsite {
                     }
                 }
                 System.out.println(pleaseWork);
+                plantRef.setValue(pleaseWork);
                 writer.append(pleaseWork + "\n" + url +"\n");
                 findLight(html);
                 writer.append("\n\n");
