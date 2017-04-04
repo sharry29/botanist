@@ -25,13 +25,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
+import java.util.*;
 
 public class AddPlantActivity extends AppCompatActivity {
     String mCurrentPhotoPath;
     static final int REQUEST_IMAGE_CAPTURE = 1;
-    final FirebaseDatabase database = FirebaseDatabase.getInstance();
-    DatabaseReference ref = database.getReference().child("Asparagus");
+    //final FirebaseDatabase database = FirebaseDatabase.getInstance();
 
 
     /**
@@ -41,14 +40,14 @@ public class AddPlantActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        System.out.println(ref);
         setContentView(R.layout.activity_add_plant);
-
+        System.out.println(getIntent().getExtras().getStringArray("plant list"));
         ArrayAdapter<String> adapter = new ArrayAdapter<String> (this,
-                android.R.layout.simple_dropdown_item_1line, PLANTS);
+                android.R.layout.simple_dropdown_item_1line, getIntent().getExtras().getStringArray("plant list"));
         AutoCompleteTextView textView = (AutoCompleteTextView) findViewById(R.id.plant_list);
         textView.setAdapter(adapter);
     }
+
 
     /**
      * List of plants used for the autocomplete textView. This is just meant to check the functionality

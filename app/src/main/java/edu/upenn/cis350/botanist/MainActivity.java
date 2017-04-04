@@ -17,13 +17,11 @@ import android.widget.ListView;
 import com.google.firebase.database.*;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Iterator;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
+    private String[] plantList;
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
     private static String[] STORAGE_PERMISSIONS = {
             Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -34,28 +32,12 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        FirebaseDatabase db = FirebaseDatabase.getInstance();
+        DatabaseReference ref = db.getReference();
+        ref.addValueEventListener(plantListener);
+
+
         MY_PLANTS_FILE = confirmFlowersFilePresent();
-
-        System.out.println("here");
-        // TEST CODE!!!
-        String FILENAME = "my_plants";
-        FileInputStream f = null;
-        try {
-            f = openFileInput(FILENAME);
-            int chr = f.read();
-            String str = "";
-            while (chr != -1) {
-                str = str + Character.toString((char) chr);
-                chr = f.read();
-            }
-            System.out.println(str);
-            f.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
         // Check needed in recent APK levels even if perms. in manifest
         verifyReadWritePermission(this);
         setContentView(R.layout.activity_main);
@@ -83,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
                     case "Add New Plant":
                         Intent addPlantIntent = new Intent(getApplicationContext(),
                                 AddPlantActivity.class);
+                        addPlantIntent.putExtra("plant list", plantList);
                         startActivity(addPlantIntent);
                         break;
                     case "View Plant Types":
@@ -106,6 +89,21 @@ public class MainActivity extends AppCompatActivity {
             startActivity(userSettingsIntent);
         }
     }
+
+    ValueEventListener plantListener = new ValueEventListener() {
+        @Override
+        public void onDataChange(DataSnapshot dataSnapshot) {
+            Map<String, Map<String, String>> plants = (Map<String, Map<String, String>>) dataSnapshot.getValue();
+            plantList = plants.keySet().toArray(new String[plants.size()]);
+        }
+
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+            // Getting Post failed, log a message
+            System.out.println(databaseError);
+            // ...
+        }
+    };
 
     protected File confirmFlowersFilePresent() {
         File storageDirectory = getFilesDir();
