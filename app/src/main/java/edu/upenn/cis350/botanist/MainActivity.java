@@ -21,7 +21,6 @@ import java.io.IOException;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
-    private String[] plantList;
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
     private static String[] STORAGE_PERMISSIONS = {
             Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -32,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        PlantDatabase pd = new PlantDatabase();
+        PlantDatabase pd = PlantDatabase.getInstance();
         MY_PLANTS_FILE = confirmFlowersFilePresent();
         // Check needed in recent APK levels even if perms. in manifest
         verifyReadWritePermission(this);
@@ -61,8 +60,6 @@ public class MainActivity extends AppCompatActivity {
                     case "Add New Plant":
                         Intent addPlantIntent = new Intent(getApplicationContext(),
                                 AddPlantActivity.class);
-                        addPlantIntent.putExtra("plant list", plantList);
-                        //addPlantIntent.putExtra
                         startActivity(addPlantIntent);
                         break;
                     case "View Plant Types":

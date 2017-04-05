@@ -9,23 +9,21 @@ import java.util.*;
  */
 
 public class PlantDatabase {
-    private List<Plant> plantList;
-    private class Plant {
-        public String name;
-        public String url;
-        public String light;
+    private List<PlantModel> plantList;
+    private static PlantDatabase instance;
 
-        public Plant() {
-
-        }
-
-    }
-
-    public PlantDatabase() {
+    private PlantDatabase() {
         FirebaseDatabase db = FirebaseDatabase.getInstance();
         DatabaseReference ref = db.getReference();
         ref.addValueEventListener(plantListener);
-        plantList = new LinkedList<Plant>();
+        plantList = new LinkedList<PlantModel>();
+    }
+
+    public static PlantDatabase getInstance() {
+        if (instance == null) {
+            instance = new PlantDatabase();
+        }
+        return instance;
     }
 
     ValueEventListener plantListener = new ValueEventListener() {
@@ -33,10 +31,7 @@ public class PlantDatabase {
         public void onDataChange(DataSnapshot dataSnapshot) {
             Map<String, Map<String, String>> plants = (Map<String, Map<String, String>>) dataSnapshot.getValue();
             for (String plant : plants.keySet()) {
-                Plant p = new Plant();
-                p.name = plant;
-                p.url = plants.get(plant).get("url");
-                p.light = plants.get(plant).get("light");
+                PlantModel p = new PlantModel(plant, plants.get(plant).get("url"), plants.get(plant).get("light"));
                 plantList.add(p);
             }
         }
@@ -49,12 +44,12 @@ public class PlantDatabase {
         }
     };
 
-    public String[] getPlantStrings() {
+    public String[] getPlantNames() {
         String[] plantStrings = new String[plantList.size()];
+
         int count = 0;
-        for (Plant curr : plantList) {
-            Gson g = new Gson();
-            plantStrings[count] = g.toJson(curr);
+        for (PlantModel curr : plantList) {
+            plantStrings[count] = curr.getName();
             count++;
         }
         return plantStrings;

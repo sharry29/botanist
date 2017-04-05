@@ -30,7 +30,7 @@ import java.util.*;
 public class AddPlantActivity extends AppCompatActivity {
     String mCurrentPhotoPath;
     static final int REQUEST_IMAGE_CAPTURE = 1;
-    //final FirebaseDatabase database = FirebaseDatabase.getInstance();
+    private PlantDatabase database;
 
 
     /**
@@ -40,11 +40,13 @@ public class AddPlantActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        database = PlantDatabase.getInstance();
         setContentView(R.layout.activity_add_plant);
         ArrayAdapter<String> adapter = new ArrayAdapter<String> (this,
-                android.R.layout.simple_dropdown_item_1line, getIntent().getExtras().getStringArray("plant list"));
+                android.R.layout.simple_dropdown_item_1line, database.getPlantNames());
         AutoCompleteTextView textView = (AutoCompleteTextView) findViewById(R.id.plant_list);
         textView.setAdapter(adapter);
+
     }
 
 
