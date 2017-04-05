@@ -41,7 +41,6 @@ public class AddPlantActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_plant);
-        System.out.println(getIntent().getExtras().getStringArray("plant list"));
         ArrayAdapter<String> adapter = new ArrayAdapter<String> (this,
                 android.R.layout.simple_dropdown_item_1line, getIntent().getExtras().getStringArray("plant list"));
         AutoCompleteTextView textView = (AutoCompleteTextView) findViewById(R.id.plant_list);

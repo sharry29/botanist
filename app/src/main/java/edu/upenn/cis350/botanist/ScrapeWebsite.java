@@ -127,8 +127,9 @@ public class ScrapeWebsite {
                 }
                 System.out.println(pleaseWork);
                 writer.append(pleaseWork + "\n" + url +"\n");
-                findLight(html);
+                String light = findLight(html);
                 writer.append("\n\n");
+
             } catch (IndexOutOfBoundsException e) {
                 break;
 
@@ -141,7 +142,7 @@ public class ScrapeWebsite {
 
     }
 
-    private static void findLight(String html) {
+    private static String findLight(String html) {
         Pattern pTwo = Pattern.compile("Light:</strong>.*?</li>");
         Matcher mTwo = pTwo.matcher(html);
         while (mTwo.find()) {
@@ -158,6 +159,9 @@ public class ScrapeWebsite {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            return light;
         }
+        return null;
     }
+
 }

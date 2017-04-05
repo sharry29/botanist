@@ -13,7 +13,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-
+import com.google.gson.Gson;
 import com.google.firebase.database.*;
 
 import java.io.File;
@@ -32,11 +32,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        FirebaseDatabase db = FirebaseDatabase.getInstance();
-        DatabaseReference ref = db.getReference();
-        ref.addValueEventListener(plantListener);
-
-
+        PlantDatabase pd = new PlantDatabase();
         MY_PLANTS_FILE = confirmFlowersFilePresent();
         // Check needed in recent APK levels even if perms. in manifest
         verifyReadWritePermission(this);
@@ -66,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
                         Intent addPlantIntent = new Intent(getApplicationContext(),
                                 AddPlantActivity.class);
                         addPlantIntent.putExtra("plant list", plantList);
+                        //addPlantIntent.putExtra
                         startActivity(addPlantIntent);
                         break;
                     case "View Plant Types":
@@ -89,21 +86,6 @@ public class MainActivity extends AppCompatActivity {
             startActivity(userSettingsIntent);
         }
     }
-
-    ValueEventListener plantListener = new ValueEventListener() {
-        @Override
-        public void onDataChange(DataSnapshot dataSnapshot) {
-            Map<String, Map<String, String>> plants = (Map<String, Map<String, String>>) dataSnapshot.getValue();
-            plantList = plants.keySet().toArray(new String[plants.size()]);
-        }
-
-        @Override
-        public void onCancelled(DatabaseError databaseError) {
-            // Getting Post failed, log a message
-            System.out.println(databaseError);
-            // ...
-        }
-    };
 
     protected File confirmFlowersFilePresent() {
         File storageDirectory = getFilesDir();
