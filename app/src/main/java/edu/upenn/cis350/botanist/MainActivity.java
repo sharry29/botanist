@@ -13,8 +13,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import com.google.gson.Gson;
-import com.google.firebase.database.*;
 
 import java.io.File;
 import java.io.IOException;

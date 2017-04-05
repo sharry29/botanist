@@ -54,4 +54,13 @@ public class PlantDatabase {
         }
         return plantStrings;
     }
+
+    public PlantModel getPlantByName(String name) {
+        for (PlantModel curr : plantList) {
+            if (name.equals(curr.getName())) {
+                return curr;
+            }
+        }
+        return null;
+    }
 }

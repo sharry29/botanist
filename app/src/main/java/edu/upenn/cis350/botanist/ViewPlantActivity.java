@@ -41,9 +41,11 @@ import java.util.Locale;
 public class ViewPlantActivity extends AppCompatActivity{
     private Plant plant;
     private File[] images;
+    private PlantDatabase database;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        database = PlantDatabase.getInstance();
         setContentView(R.layout.activity_view_plant);
 
         //POPUP MENU TESTING
@@ -82,8 +84,13 @@ public class ViewPlantActivity extends AppCompatActivity{
         //Add a Description box. Obviously this is just filler text, will replace with plant info
         //when we find a plant API (or download a plant dictionary)
         TextView description = (TextView) findViewById(R.id.plant_description);
-        description.setText("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla consectetur aliquam ligula sit amet pretium. Aliquam ante magna, venenatis sit amet eros quis, mollis imperdiet mi. Fusce eget libero sed arcu aliquet vehicula a vel leo. Duis a faucibus augue. Cras ac varius velit. Donec a blandit nunc. In bibendum, sem at suscipit ullamcorper, nibh magna consequat ante, a pellentesque ante tellus et urna. Maecenas non metus sollicitudin, blandit sapien at, pellentesque odio. Integer eget mauris bibendum, blandit ante ut, scelerisque leo. Vivamus ut ex urna. Mauris porttitor neque nec sagittis mollis. Donec malesuada sit amet nibh nec placerat. Sed ac semper lectus.");
-        description.setPadding(25, 0, 0, 0);
+        PlantModel p = database.getPlantByName(plant.getType());
+        if (p == null) {
+            description.setText("Sorry, no information about this plant is available at the moment.");
+        } else {
+            description.setText("Light needs: " + p.getLight() + "\nYou can find more information about this plant at " + p.getUrl());
+        }
+            description.setPadding(25, 0, 0, 0);
         //viewPlantLayout.addView(description);
 
         //Create horizontal-scroll images from jpgs

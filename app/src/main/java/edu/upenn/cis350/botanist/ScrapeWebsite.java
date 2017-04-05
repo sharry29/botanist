@@ -3,8 +3,6 @@ package edu.upenn.cis350.botanist;
 import java.io.*;
 import java.util.List;
 import java.util.regex.*;
-import com.google.firebase.*;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 
