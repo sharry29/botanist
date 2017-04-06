@@ -103,7 +103,10 @@ public class ViewPlantActivity extends AppCompatActivity{
             imgB.setAdjustViewBounds(true);
             imgB.setPadding(15, 0, 15, 0);
             imgB.setId(i);
-            Bitmap flowerPicture = BitmapFactory.decodeFile(images[i].getAbsolutePath());
+
+            final BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inSampleSize = 10;
+            Bitmap flowerPicture = BitmapFactory.decodeFile(images[i].getAbsolutePath(), options);
             imgB.setImageBitmap(flowerPicture);
 
             //Set the button's onclick listener

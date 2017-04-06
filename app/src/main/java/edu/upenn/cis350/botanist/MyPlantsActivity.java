@@ -2,6 +2,8 @@ package edu.upenn.cis350.botanist;
 
 import android.app.ActionBar;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -183,6 +185,10 @@ public class MyPlantsActivity extends AppCompatActivity {
         try {
             System.out.println("Reading plants...");
             String FILENAME = "my_plants";
+            PackageManager m = getPackageManager();
+            String s = getPackageName();
+            PackageInfo p = m.getPackageInfo(s, 0);
+            System.out.println(p.applicationInfo.dataDir);
             FileInputStream f = openFileInput(FILENAME);
             InputStreamReader isReader = new InputStreamReader(f);
             BufferedReader in = new BufferedReader(isReader);
@@ -198,6 +204,8 @@ public class MyPlantsActivity extends AppCompatActivity {
             e.printStackTrace();
         } catch (IOException e) {
             System.out.println("IOException in readPlantsFromFile() in MyPlantsActivity");
+            e.printStackTrace();
+        } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
     }
