@@ -1,8 +1,11 @@
 package edu.upenn.cis350.botanist;
 
+import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -42,9 +45,36 @@ public class ManagePicturesActivity extends AppCompatActivity {
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v,
                                     int position, long id) {
-                Toast.makeText(ManagePicturesActivity.this, "" + position,
-                        Toast.LENGTH_SHORT).show();
+                AlertDialog.Builder builder1 = new AlertDialog.Builder(ManagePicturesActivity.this);
+                builder1.setMessage("Do you want to delete this picture? Cannot be undone.");
+                builder1.setCancelable(true);
+                final int index = position;
+                builder1.setPositiveButton(
+                        "Yes, delete",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                pictures[index].delete();
+                                dialog.cancel();
+                                Intent returnIntent = new Intent();
+                                returnIntent.putExtra("result", RESULT_OK);
+                                setResult(Activity.RESULT_OK,returnIntent);
+                                finish();
+                            }
+                        });
 
+                builder1.setNegativeButton(
+                        "No, do not delete",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+
+                AlertDialog alert11 = builder1.create();
+                alert11.show();
+//                Toast.makeText(ManagePicturesActivity.this, "" + position,
+//                        Toast.LENGTH_SHORT).show();
+               //ViewPlantActivity.refreshPlantList(true);
             }
         });
         gridview.setPadding(0, 200, 0, 0);
@@ -90,7 +120,35 @@ public class ManagePicturesActivity extends AppCompatActivity {
             Intent settingsIntent = new Intent(getApplicationContext(), UserSettingsActivity.class);
             startActivity(settingsIntent);
         } else if (item.getTitle().equals("Delete All Pictures")) {
-            //Delete the pictures..
+            AlertDialog.Builder builder1 = new AlertDialog.Builder(ManagePicturesActivity.this);
+            builder1.setMessage("Are you sure you want to delete all of this plant's photos? This cannot be undone.");
+            builder1.setCancelable(true);
+
+            builder1.setPositiveButton(
+                    "Yes, delete all",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            for (File pic : pictures)  {
+                                pic.delete();
+                                Intent returnIntent = new Intent();
+                                setResult(Activity.RESULT_CANCELED, returnIntent);
+                                finish();
+                            }
+                            dialog.cancel();
+                        }
+                    });
+
+            builder1.setNegativeButton(
+                    "No, save my pictures",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    });
+
+            AlertDialog alert11 = builder1.create();
+            alert11.show();
+
         }
         return true;
     }

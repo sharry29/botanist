@@ -95,26 +95,28 @@ public class ViewPlantActivity extends AppCompatActivity{
 
         //Create horizontal-scroll images from jpgs
         LinearLayout imageScroll = (LinearLayout) findViewById(R.id.image_spinner);
-        for(int i = 0; i < images.length; i++) {
-            LinearLayout.LayoutParams imgParams = new LinearLayout.LayoutParams(200, 200);
-            ImageButton imgB = new ImageButton(this);
-            imgB.setLayoutParams(imgParams);
-            imgB.setScaleType(ImageView.ScaleType.FIT_CENTER);
-            imgB.setAdjustViewBounds(true);
-            imgB.setPadding(15, 0, 15, 0);
-            imgB.setId(i);
-            Bitmap flowerPicture = BitmapFactory.decodeFile(images[i].getAbsolutePath());
-            imgB.setImageBitmap(flowerPicture);
+        if (images != null) {
+            for (int i = 0; i < images.length; i++) {
+                LinearLayout.LayoutParams imgParams = new LinearLayout.LayoutParams(200, 200);
+                ImageButton imgB = new ImageButton(this);
+                imgB.setLayoutParams(imgParams);
+                imgB.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                imgB.setAdjustViewBounds(true);
+                imgB.setPadding(15, 0, 15, 0);
+                imgB.setId(i);
+                Bitmap flowerPicture = BitmapFactory.decodeFile(images[i].getAbsolutePath());
+                imgB.setImageBitmap(flowerPicture);
 
-            //Set the button's onclick listener
-            imgB.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    imageScrollButtonPress(v.getId());
-                }
-            });
+                //Set the button's onclick listener
+                imgB.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        imageScrollButtonPress(v.getId());
+                    }
+                });
 
-            imageScroll.addView(imgB);
+                imageScroll.addView(imgB);
+            }
         }
 
         Button takePicture = new Button(this);
@@ -185,6 +187,7 @@ public class ViewPlantActivity extends AppCompatActivity{
                 startActivityForResult(takePictureIntent, PhotoActivity.REQUEST_IMAGE_CAPTURE);
 
             }
+
         }
     }
 
@@ -198,6 +201,26 @@ public class ViewPlantActivity extends AppCompatActivity{
                         "Picture saved.",
                         Toast.LENGTH_SHORT);
                 t.show();
+                refreshPlantList(false);
+            }
+        }
+        //73 is literally just a random number that I chose. It represents
+        //a return from ManagePicturesActivity
+        else if (requestCode == 73) {
+            if (resultCode == RESULT_OK) {
+                //go back to managepics
+                Toast t = Toast.makeText(getApplicationContext(),
+                        "Picture deleted.",
+                        Toast.LENGTH_SHORT);
+                t.show();
+                refreshPlantList(true);
+            } else if (resultCode == RESULT_CANCELED) {
+                //do not go back to managepics
+                Toast t = Toast.makeText(getApplicationContext(),
+                        "Pictures deleted.",
+                        Toast.LENGTH_SHORT);
+                t.show();
+                refreshPlantList(false);
             }
         }
     }
@@ -221,6 +244,28 @@ public class ViewPlantActivity extends AppCompatActivity{
         return image;
     }
 
+    //To be called from this activity or ManagePicturesActivity
+    //Purpose is so that new pictures/deleted pictures update realtime instead of on page reload
+    public void refreshPlantList(boolean returnToManage) {
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File plantDir = new File(storageDir.getAbsolutePath() + "/" + plant.getName());
+        images = findAllImages(plantDir);
+
+        if (returnToManage) {
+            //Intent backToManagePictures = new Intent(getApplicationContext(), ManagePicturesActivity.class);
+            Intent managePicsIntent = new Intent(getApplicationContext(), ManagePicturesActivity.class);
+            managePicsIntent.putExtra("Plant", plant);
+            startActivityForResult(managePicsIntent, 73);
+            managePicsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+            startActivity(managePicsIntent);
+        } else {
+            Intent thisIntent = this.getIntent();
+            thisIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+            finish();
+            startActivity(thisIntent);
+        }
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -242,7 +287,7 @@ public class ViewPlantActivity extends AppCompatActivity{
         } else if (item.getTitle().equals("Manage Plant Pictures")) {
             Intent managePicsIntent = new Intent(getApplicationContext(), ManagePicturesActivity.class);
             managePicsIntent.putExtra("Plant", plant);
-            startActivity(managePicsIntent);
+            startActivityForResult(managePicsIntent, 73);
         }
         return true;
     }
