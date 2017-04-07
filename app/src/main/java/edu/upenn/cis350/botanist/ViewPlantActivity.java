@@ -144,8 +144,17 @@ public class ViewPlantActivity extends AppCompatActivity{
         });
         viewPlantLayout.addView(viewGIF);
 
-        //Add a Take a Picture bo
-
+        Button viewDaysWatered = new Button(this);
+        viewDaysWatered.setText("View Days Watered");
+        viewDaysWatered.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent daysWateredIntent = new Intent(getApplicationContext(),
+                        DaysWateredActivity.class);
+                startActivity(daysWateredIntent);
+            }
+        });
+        viewPlantLayout.addView(viewDaysWatered);
     }
 
     public void imageScrollButtonPress(int id) {
