@@ -1,16 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res-auto">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <!-- "Add a Plant", should appear as action button if possible -->
     <item
         android:title="@string/action_add_plant"
-        android:id="@+id/action_add_plant"
-        android:icon="@drawable/ic_favorite_black_48dp"
-        android:showAsAction="ifRoom"/>
+        android:icon="@drawable/ic_library_add_white_24dp"
+        app:showAsAction="ifRoom"
+        android:id="@+id/action_add_plant"/>
+
 
     <!-- Settings, should always be in the overflow -->
-    <item android:id="@+id/action_settings"
-        android:icon="@drawable/ic_settings_black_48dp"
+    <item
+        android:icon="@drawable/ic_settings_white_24dp"
         android:title="@string/action_settings"
-        android:showAsAction="never"/>
+        app:showAsAction="ifRoom"
+        android:id="@+id/action_settings"/>
 
 </menu>

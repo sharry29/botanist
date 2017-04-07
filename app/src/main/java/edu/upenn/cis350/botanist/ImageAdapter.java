@@ -48,7 +48,10 @@ public class ImageAdapter extends BaseAdapter {
         } else {
             imageView = (ImageView) convertView;
         }
-        Bitmap flowerPicture = BitmapFactory.decodeFile(pictures[position].getAbsolutePath());
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inSampleSize = 5;
+        Bitmap flowerPicture = BitmapFactory.decodeFile(pictures[position].getAbsolutePath(),
+                options);
         imageView.setImageBitmap(flowerPicture);
         return imageView;
     }
