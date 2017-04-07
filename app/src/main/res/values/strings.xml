@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">Botanist</string>
     <string name="welcome_to_botanist">Welcome to Botanist!</string>
+    <string name="action_add_plant">Add a plant</string>
+    <string name="action_settings">View/Edit Settings</string>
     <string-array name="main_menu_array">
         <item>Monitor Plants</item>
         <item>Take a Photo</item>

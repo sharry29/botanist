@@ -64,8 +64,6 @@ public class GifActivity extends AppCompatActivity{
             Map.Entry<Date, File> frameFile = orderedImages.pollFirstEntry();
             final BitmapFactory.Options options = new BitmapFactory.Options();
             options.inSampleSize = 5;
-            options.outHeight = (int) Math.floor(plantImage.getHeight() * 0.5);
-            options.outWidth = (int) Math.floor(plantImage.getWidth() * 0.5);
             Bitmap rotated = BitmapFactory.decodeFile(frameFile.getValue().toString(), options);
             Matrix matrix = new Matrix();
             matrix.postRotate(90);
