@@ -45,14 +45,14 @@ public class ViewPlantActivity extends AppCompatActivity{
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        database = PlantDatabase.getInstance();
+
         setContentView(R.layout.activity_view_plant);
 
         //POPUP MENU TESTING
         //PopupMenu menu = new PopupMenu(getApplicationContext(), this);
 
 
-
+        database = PlantDatabase.getInstance();
         //Get the layout
         LinearLayout viewPlantLayout = (LinearLayout) findViewById(R.id.view_plant_linlayout);
 
@@ -95,6 +95,7 @@ public class ViewPlantActivity extends AppCompatActivity{
 
         //Create horizontal-scroll images from jpgs
         LinearLayout imageScroll = (LinearLayout) findViewById(R.id.image_spinner);
+/*<<<<<<< HEAD
         if (images != null) {
             for (int i = 0; i < images.length; i++) {
                 LinearLayout.LayoutParams imgParams = new LinearLayout.LayoutParams(200, 200);
@@ -117,6 +118,31 @@ public class ViewPlantActivity extends AppCompatActivity{
 
                 imageScroll.addView(imgB);
             }
+=======*/
+        for(int i = 0; i < images.length; i++) {
+            LinearLayout.LayoutParams imgParams = new LinearLayout.LayoutParams(200, 200);
+            ImageButton imgB = new ImageButton(this);
+            imgB.setLayoutParams(imgParams);
+            imgB.setScaleType(ImageView.ScaleType.FIT_CENTER);
+            imgB.setAdjustViewBounds(true);
+            imgB.setPadding(15, 0, 15, 0);
+            imgB.setId(i);
+
+            final BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inSampleSize = 10;
+            Bitmap flowerPicture = BitmapFactory.decodeFile(images[i].getAbsolutePath(), options);
+            imgB.setImageBitmap(flowerPicture);
+
+            //Set the button's onclick listener
+            imgB.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    imageScrollButtonPress(v.getId());
+                }
+            });
+
+            imageScroll.addView(imgB);
+//>>>>>>> 1c6bfcb4b413066cb30be4945ad120f236c8ad02
         }
 
         Button takePicture = new Button(this);
@@ -143,8 +169,17 @@ public class ViewPlantActivity extends AppCompatActivity{
         });
         viewPlantLayout.addView(viewGIF);
 
-        //Add a Take a Picture bo
-
+        Button viewDaysWatered = new Button(this);
+        viewDaysWatered.setText("View Days Watered");
+        viewDaysWatered.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent daysWateredIntent = new Intent(getApplicationContext(),
+                        DaysWateredActivity.class);
+                startActivity(daysWateredIntent);
+            }
+        });
+        viewPlantLayout.addView(viewDaysWatered);
     }
 
     public void imageScrollButtonPress(int id) {
@@ -197,6 +232,35 @@ public class ViewPlantActivity extends AppCompatActivity{
         // Check which request we're responding to
         if (requestCode == PhotoActivity.REQUEST_IMAGE_CAPTURE) {
             if (resultCode == RESULT_OK) {
+                LinearLayout imageScroll = (LinearLayout) findViewById(R.id.image_spinner);
+                imageScroll.removeAllViews();
+                File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+                File plantDir = new File(storageDir.getAbsolutePath() + "/" + plant.getName());
+                images = findAllImages(plantDir); //MAY BE NULL!
+                for(int i = 0; i < images.length; i++) {
+                    LinearLayout.LayoutParams imgParams = new LinearLayout.LayoutParams(200, 200);
+                    ImageButton imgB = new ImageButton(this);
+                    imgB.setLayoutParams(imgParams);
+                    imgB.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                    imgB.setAdjustViewBounds(true);
+                    imgB.setPadding(15, 0, 15, 0);
+                    imgB.setId(i);
+
+                    final BitmapFactory.Options options = new BitmapFactory.Options();
+                    options.inSampleSize = 10;
+                    Bitmap flowerPicture = BitmapFactory.decodeFile(images[i].getAbsolutePath(), options);
+                    imgB.setImageBitmap(flowerPicture);
+
+                    //Set the button's onclick listener
+                    imgB.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            imageScrollButtonPress(v.getId());
+                        }
+                    });
+                    imageScroll.addView(imgB);
+                }
+
                 Toast t = Toast.makeText(getApplicationContext(),
                         "Picture saved.",
                         Toast.LENGTH_SHORT);

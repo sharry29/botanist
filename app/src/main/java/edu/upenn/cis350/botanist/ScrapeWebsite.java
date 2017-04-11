@@ -19,7 +19,8 @@ public class ScrapeWebsite {
         //FirebaseDatabase d = FirebaseDatabase.getInstance("https://cis350-botanist.firebaseio.com/");
         URLGetter g = new URLGetter("https://bonnieplants.com");
         try {
-            writer = new FileWriter(new File("plant_info.txt"), false);
+            writer = new FileWriter(new File("plant_info.json"), false);
+            writer.append("{\n");
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -34,7 +35,7 @@ public class ScrapeWebsite {
             try {
                 String pleaseWork = m.group();
                 String url = "https://bonnieplants.com/" + pleaseWork.substring(7, pleaseWork.length() - 2);
-                System.out.println(url);
+                //System.out.println(url);
                 writeInfo(url);
             } catch (IndexOutOfBoundsException e) {
                 System.out.println("here");
@@ -45,7 +46,7 @@ public class ScrapeWebsite {
 
             }
         }
-        System.out.println("\n\nEND OF EASY SECTION\n\n");
+        //System.out.println("\n\nEND OF EASY SECTION\n\n");
         Pattern pVeg = Pattern.compile("href=\"/product-category/vegetables/.*?\">\\w*</a></li>");
         Matcher mVeg = pVeg.matcher(html);
         while (mVeg.find()) {
@@ -59,7 +60,7 @@ public class ScrapeWebsite {
                     }
                 }
                 String url = "https://bonnieplants.com/product-category/vegetables/" + pleaseWork.substring(35, endIndex);
-                System.out.println(url);
+                //System.out.println(url);
                 getPlantsInCategory(url);
             } catch (IndexOutOfBoundsException e) {
                 break;
@@ -69,6 +70,7 @@ public class ScrapeWebsite {
             }
         }
         try {
+            writer.append("}");
             writer.close();
         } catch (IOException e) {
             e.printStackTrace();
@@ -92,7 +94,7 @@ public class ScrapeWebsite {
                     }
                 }
                 String newUrl = pleaseWork.substring(9, endIndex);
-                System.out.println(newUrl);
+                //System.out.println(newUrl);
                 writeInfo(newUrl);
                 } catch (IndexOutOfBoundsException e) {
                 break;
@@ -123,10 +125,12 @@ public class ScrapeWebsite {
                         break;
                     }
                 }
-                System.out.println(pleaseWork);
-                writer.append(pleaseWork + "\n" + url +"\n");
+                //System.out.println(pleaseWork);
+                //writer.append(pleaseWork + "\n" + url +"\n");
                 String light = findLight(html);
-                writer.append("\n\n");
+
+                writer.append("\"" + pleaseWork + "\" : {\n\"light\": \"" + light + "\",\n\"url\": \"" + url + "\"},\n");
+                //writer.append("\n\n");
 
             } catch (IndexOutOfBoundsException e) {
                 break;
@@ -145,18 +149,18 @@ public class ScrapeWebsite {
         Matcher mTwo = pTwo.matcher(html);
         while (mTwo.find()) {
             String light = mTwo.group();
-            System.out.println(mTwo.group());
+            //System.out.println(mTwo.group());
             for (int i = 15; i < light.length(); i++) {
                 if (light.substring(i, i+1).equals("<")) {
                     light = light.substring(15, i);
                     break;
                 }
             }
-            try {
+            /*try {
                 writer.append("Light needs: " + light);
             } catch (IOException e) {
                 e.printStackTrace();
-            }
+            }*/
             return light;
         }
         return null;

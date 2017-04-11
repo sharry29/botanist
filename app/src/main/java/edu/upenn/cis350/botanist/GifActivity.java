@@ -1,12 +1,18 @@
 package edu.upenn.cis350.botanist;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.graphics.drawable.AnimationDrawable;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MotionEvent;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -35,6 +41,11 @@ public class GifActivity extends AppCompatActivity{
         File[] images = (File[]) getIntent().getSerializableExtra("images");
 
         ImageView plantImage = new ImageView(this);
+
+        //plantImage.setScaleType(ImageView.ScaleType.FIT_CENTER);
+
+        ViewGroup.LayoutParams params = plantImage.getLayoutParams();
+
         plantAnimation = new AnimationDrawable();
 
         TreeMap<Date, File> orderedImages = new TreeMap<>();
@@ -51,12 +62,22 @@ public class GifActivity extends AppCompatActivity{
         numPhotos = orderedImages.size();
         while (!orderedImages.isEmpty()) {
             Map.Entry<Date, File> frameFile = orderedImages.pollFirstEntry();
-            Drawable frame = Drawable.createFromPath(frameFile.getValue().toString());
-            plantImage.setBackground(frame);
+            final BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inSampleSize = 5;
+            Bitmap rotated = BitmapFactory.decodeFile(frameFile.getValue().toString(), options);
+            Matrix matrix = new Matrix();
+            matrix.postRotate(90);
+            Bitmap fixed = Bitmap.createBitmap(rotated, 0, 0,
+                    rotated.getWidth(), rotated.getHeight(), matrix, true);
+            BitmapDrawable frame = new BitmapDrawable(this.getResources(), fixed);
+            //Drawable frame = Drawable.createFromPath(frameFile.getValue().toString());
+            //plantImage.setBackground(frame);
+
             plantAnimation.addFrame(frame, 4000 / numPhotos);
         }
-        plantImage.setBackground(plantAnimation);
+
         setContentView(plantImage);
+        plantImage.setBackground(plantAnimation);
 
         Toast t = Toast.makeText(getApplicationContext(),
                 "Tap to start!",
