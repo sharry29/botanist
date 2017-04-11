@@ -95,30 +95,7 @@ public class ViewPlantActivity extends AppCompatActivity{
 
         //Create horizontal-scroll images from jpgs
         LinearLayout imageScroll = (LinearLayout) findViewById(R.id.image_spinner);
-/*<<<<<<< HEAD
-        if (images != null) {
-            for (int i = 0; i < images.length; i++) {
-                LinearLayout.LayoutParams imgParams = new LinearLayout.LayoutParams(200, 200);
-                ImageButton imgB = new ImageButton(this);
-                imgB.setLayoutParams(imgParams);
-                imgB.setScaleType(ImageView.ScaleType.FIT_CENTER);
-                imgB.setAdjustViewBounds(true);
-                imgB.setPadding(15, 0, 15, 0);
-                imgB.setId(i);
-                Bitmap flowerPicture = BitmapFactory.decodeFile(images[i].getAbsolutePath());
-                imgB.setImageBitmap(flowerPicture);
 
-                //Set the button's onclick listener
-                imgB.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        imageScrollButtonPress(v.getId());
-                    }
-                });
-
-                imageScroll.addView(imgB);
-            }
-=======*/
         for(int i = 0; i < images.length; i++) {
             LinearLayout.LayoutParams imgParams = new LinearLayout.LayoutParams(200, 200);
             ImageButton imgB = new ImageButton(this);
@@ -142,7 +119,6 @@ public class ViewPlantActivity extends AppCompatActivity{
             });
 
             imageScroll.addView(imgB);
-//>>>>>>> 1c6bfcb4b413066cb30be4945ad120f236c8ad02
         }
 
         Button takePicture = new Button(this);
@@ -180,6 +156,18 @@ public class ViewPlantActivity extends AppCompatActivity{
             }
         });
         viewPlantLayout.addView(viewDaysWatered);
+
+        Button goBack = new Button(this);
+        goBack.setText("Go Back to My Plants");
+        goBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent homepageIntent = new Intent(getApplicationContext(),
+                        MainActivity.class);
+                startActivity(homepageIntent);
+            }
+        });
+        viewPlantLayout.addView(goBack);
     }
 
     public void imageScrollButtonPress(int id) {
@@ -278,13 +266,15 @@ public class ViewPlantActivity extends AppCompatActivity{
                         Toast.LENGTH_SHORT);
                 t.show();
                 refreshPlantList(true);
-            } else if (resultCode == RESULT_CANCELED) {
+            } else if (resultCode == RESULT_FIRST_USER) {
                 //do not go back to managepics
                 Toast t = Toast.makeText(getApplicationContext(),
                         "Pictures deleted.",
                         Toast.LENGTH_SHORT);
                 t.show();
                 refreshPlantList(false);
+            } else if (resultCode == RESULT_CANCELED) {
+                refreshPlantList(false); //They hit the back button
             }
         }
     }
@@ -321,11 +311,11 @@ public class ViewPlantActivity extends AppCompatActivity{
             managePicsIntent.putExtra("Plant", plant);
             startActivityForResult(managePicsIntent, 73);
             managePicsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-            startActivity(managePicsIntent);
+            //startActivity(managePicsIntent);
         } else {
+            finish();
             Intent thisIntent = this.getIntent();
             thisIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-            finish();
             startActivity(thisIntent);
         }
     }

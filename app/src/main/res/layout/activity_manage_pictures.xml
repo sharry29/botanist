@@ -25,4 +25,11 @@
         android:outlineProvider="background"
         android:layout_weight="1.15" />
 
+    <Button
+        android:text="Button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/managePicsReturnButton"
+        android:onClick="onBackButtonPress" />
+
 </LinearLayout>

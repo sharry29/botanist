@@ -99,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
 
 
             //Draw image
-            RelativeLayout.LayoutParams imgParams = new RelativeLayout.LayoutParams(300, 300);
+            RelativeLayout.LayoutParams imgParams = new RelativeLayout.LayoutParams(200, 200);
             imgParams.addRule(RelativeLayout.ALIGN_LEFT);
             ImageView flowerImg = new ImageView(this);
             int id = View.generateViewId();
@@ -125,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
 
             //List Text
             TextView name = new TextView(this);
-            RelativeLayout.LayoutParams textParams = new RelativeLayout.LayoutParams(500, 100);
+            RelativeLayout.LayoutParams textParams = new RelativeLayout.LayoutParams(500, 175);
             textParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
             textParams.addRule(RelativeLayout.RIGHT_OF, id);
 
@@ -138,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
 
 
             //Button
-            imgParams = new RelativeLayout.LayoutParams(200, 200);
+            imgParams = new RelativeLayout.LayoutParams(150, 150);
             imgParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
             imgParams.addRule(RelativeLayout.CENTER_HORIZONTAL, RelativeLayout.TRUE);
             ImageButton imgB = new ImageButton(this);

@@ -158,12 +158,9 @@ public class MyPlantsActivity extends AppCompatActivity {
                             img.getName().substring
                                     (plantList.get(i).getName().length(),
                                             plantList.get(i).getName().length() + 15);
-//                    //DEBUGGING
-//                    System.out.println("DATE STRING: " + thisDateString);
                     Date thisDate = format.parse(thisDateString);
                     photoDates.put(thisDate, img);
-//                    //DEBUGGING
-//                    System.out.println("LATEST DATE    :   " + latestDate);
+
                 }
                 return photoDates.get(photoDates.lastKey());
             } else {
@@ -212,7 +209,3 @@ public class MyPlantsActivity extends AppCompatActivity {
 
 }
 
-/*
-I need to be able to call a sorted list of plants by Name, Age, Height, Genus, etc. Ideally array of some kind.
-This is just so the user can sort the plants however they want.
- */

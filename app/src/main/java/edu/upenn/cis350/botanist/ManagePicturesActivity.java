@@ -39,6 +39,9 @@ public class ManagePicturesActivity extends AppCompatActivity {
         pictures = findAllImages(plant.getName());
         selected = new boolean[pictures.length]; //init to false!
 
+        Button backButton = (Button) findViewById(R.id.managePicsReturnButton);
+        backButton.setText("Return to " + plant.getName());
+
         GridView gridview = (GridView) findViewById(R.id.current_pictures);
         gridview.setAdapter(new ImageAdapter(this, pictures));
 
@@ -55,6 +58,7 @@ public class ManagePicturesActivity extends AppCompatActivity {
                             public void onClick(DialogInterface dialog, int id) {
                                 pictures[index].delete();
                                 dialog.cancel();
+
                                 Intent returnIntent = new Intent();
                                 returnIntent.putExtra("result", RESULT_OK);
                                 setResult(Activity.RESULT_OK,returnIntent);
@@ -72,9 +76,7 @@ public class ManagePicturesActivity extends AppCompatActivity {
 
                 AlertDialog alert11 = builder1.create();
                 alert11.show();
-//                Toast.makeText(ManagePicturesActivity.this, "" + position,
-//                        Toast.LENGTH_SHORT).show();
-               //ViewPlantActivity.refreshPlantList(true);
+
             }
         });
         gridview.setPadding(0, 200, 0, 0);
@@ -130,10 +132,10 @@ public class ManagePicturesActivity extends AppCompatActivity {
                         public void onClick(DialogInterface dialog, int id) {
                             for (File pic : pictures)  {
                                 pic.delete();
-                                Intent returnIntent = new Intent();
-                                setResult(Activity.RESULT_CANCELED, returnIntent);
                                 finish();
                             }
+                            Intent returnIntent = new Intent();
+                            setResult(Activity.RESULT_FIRST_USER, returnIntent);
                             dialog.cancel();
                         }
                     });
@@ -151,6 +153,13 @@ public class ManagePicturesActivity extends AppCompatActivity {
 
         }
         return true;
+    }
+
+    public void onBackButtonPress(View view) {
+        finish();
+        Intent returnIntent = new Intent();
+        setResult(Activity.RESULT_CANCELED, returnIntent);
+
     }
 
 }
