@@ -69,7 +69,12 @@ public class PlantDatabase {
     }
 
     public boolean plantExists(String name) {
-        return plantList.contains(name);
+        for (PlantModel curr : plantList) {
+            if (curr.getName().equals(name)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void addPlant(String name, String website, String light) {
