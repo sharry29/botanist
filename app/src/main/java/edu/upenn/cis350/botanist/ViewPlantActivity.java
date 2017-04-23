@@ -95,30 +95,31 @@ public class ViewPlantActivity extends AppCompatActivity{
 
         //Create horizontal-scroll images from jpgs
         LinearLayout imageScroll = (LinearLayout) findViewById(R.id.image_spinner);
+        if (images != null) {
+            for (int i = 0; i < images.length; i++) {
+                LinearLayout.LayoutParams imgParams = new LinearLayout.LayoutParams(200, 200);
+                ImageButton imgB = new ImageButton(this);
+                imgB.setLayoutParams(imgParams);
+                imgB.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                imgB.setAdjustViewBounds(true);
+                imgB.setPadding(15, 0, 15, 0);
+                imgB.setId(i);
 
-        for(int i = 0; i < images.length; i++) {
-            LinearLayout.LayoutParams imgParams = new LinearLayout.LayoutParams(200, 200);
-            ImageButton imgB = new ImageButton(this);
-            imgB.setLayoutParams(imgParams);
-            imgB.setScaleType(ImageView.ScaleType.FIT_CENTER);
-            imgB.setAdjustViewBounds(true);
-            imgB.setPadding(15, 0, 15, 0);
-            imgB.setId(i);
+                final BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inSampleSize = 10;
+                Bitmap flowerPicture = BitmapFactory.decodeFile(images[i].getAbsolutePath(), options);
+                imgB.setImageBitmap(flowerPicture);
 
-            final BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inSampleSize = 10;
-            Bitmap flowerPicture = BitmapFactory.decodeFile(images[i].getAbsolutePath(), options);
-            imgB.setImageBitmap(flowerPicture);
+                //Set the button's onclick listener
+                imgB.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        imageScrollButtonPress(v.getId());
+                    }
+                });
 
-            //Set the button's onclick listener
-            imgB.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    imageScrollButtonPress(v.getId());
-                }
-            });
-
-            imageScroll.addView(imgB);
+                imageScroll.addView(imgB);
+            }
         }
 
         Button takePicture = new Button(this);

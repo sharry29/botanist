@@ -11,10 +11,13 @@ import java.util.*;
 public class PlantDatabase {
     private List<PlantModel> plantList;
     private static PlantDatabase instance;
+    private DatabaseReference ref;
+    private FirebaseDatabase db;
+    private Map<String, Map<String, String>> plants;
 
     private PlantDatabase() {
-        FirebaseDatabase db = FirebaseDatabase.getInstance();
-        DatabaseReference ref = db.getReference();
+        db = FirebaseDatabase.getInstance();
+        ref = db.getReference();
         ref.addValueEventListener(plantListener);
         plantList = new LinkedList<PlantModel>();
     }
@@ -27,6 +30,7 @@ public class PlantDatabase {
     }
 
     ValueEventListener plantListener = new ValueEventListener() {
+
         @Override
         public void onDataChange(DataSnapshot dataSnapshot) {
             Map<String, Map<String, String>> plants = (Map<String, Map<String, String>>) dataSnapshot.getValue();
@@ -66,5 +70,15 @@ public class PlantDatabase {
 
     public boolean plantExists(String name) {
         return plantList.contains(name);
+    }
+
+    public void addPlant(String name, String website, String light) {
+        Map<String, String> m = new HashMap<String, String>();
+        Map<String, String> info = new HashMap<String, String>();
+        m.put("light", light);
+        m.put("url", website);
+        //m.put(name, info);
+        //ref.push().setValue(m);
+        ref.child(name).setValue(m);
     }
 }

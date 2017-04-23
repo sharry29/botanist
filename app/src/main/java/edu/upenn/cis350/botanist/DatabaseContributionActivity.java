@@ -23,6 +23,10 @@ public class DatabaseContributionActivity extends AppCompatActivity {
     }
 
     public void submit(View view) {
+        String name = String.valueOf(((TextView) findViewById(R.id.new_plant)).getText());
+        String website = String.valueOf(((TextView) findViewById(R.id.website)).getText());
+        String light = String.valueOf(((TextView) findViewById(R.id.light)).getText());
+        database.addPlant(name, website, light);
         startActivity(new Intent(getApplicationContext(), MainActivity.class));
     }
 

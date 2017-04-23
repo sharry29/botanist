@@ -74,7 +74,7 @@
                 android:layout_height="wrap_content"
                 android:inputType="textPersonName"
                 android:ems="10"
-                android:id="@+id/editText3"
+                android:id="@+id/website"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                 android:layout_width="228dp" />
 
@@ -98,14 +98,14 @@
                 android:layout_height="wrap_content"
                 android:inputType="textPersonName"
                 android:ems="10"
-                android:id="@+id/editText2"
+                android:id="@+id/light"
                 android:layout_weight="31.75"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
         </LinearLayout>
 
         <Button
-            android:text="Button"
+            android:text="Submit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/button4"
