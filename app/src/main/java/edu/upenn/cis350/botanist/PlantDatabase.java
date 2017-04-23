@@ -63,4 +63,8 @@ public class PlantDatabase {
         }
         return null;
     }
+
+    public boolean plantExists(String name) {
+        return plantList.contains(name);
+    }
 }

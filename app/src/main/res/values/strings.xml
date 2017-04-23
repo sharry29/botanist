@@ -15,4 +15,6 @@
         <item>Never</item>
     </string-array>
     <string name="title_activity_controbute_to_database">ControbuteToDatabaseActivity</string>
+    <string name="title_activity_main2">Main2Activity</string>
+    <string name="title_activity_database_contribution">DatabaseContributionActivity</string>
 </resources>

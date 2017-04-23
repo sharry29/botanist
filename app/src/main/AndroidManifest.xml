@@ -68,11 +68,11 @@
         </receiver>
 
         <activity android:name=".ManagePicturesActivity" />
+        <activity android:name=".DaysWateredActivity" />
         <activity
-            android:name=".ControbuteToDatabaseActivity"
-            android:label="@string/title_activity_controbute_to_database"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".DaysWateredActivity"></activity>
+            android:name=".DatabaseContributionActivity"
+            android:label="@string/title_activity_database_contribution"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

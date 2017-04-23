@@ -51,14 +51,6 @@ public class AddPlantActivity extends AppCompatActivity {
 
 
     /**
-     * List of plants used for the autocomplete textView. This is just meant to check the functionality
-     * until we find a way to add and store more plants.
-     */
-    private static final String[] PLANTS = new String[] {
-            "Sunflower", "Rose", "Carnation", "Tulip", "Daffodil"
-    };
-
-    /**
      * Checks to see if our collection of plants includes the plant the user wants to add. If so,
      * redirect the user to the Wikipedia page for the plant if they click the description button.
      * If we do not have this plant on record, let the user know.
@@ -101,8 +93,28 @@ public class AddPlantActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        if (!database.plantExists(plantType)) {
+            addToDatabase(plantType);
+        }
+        //promptForPicture(plantName);
+    }
 
-        promptForPicture(plantName);
+    private void addToDatabase(final String plantType) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("This plant does not exist in our database. Would you like to add it now?")
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                    }
+                })
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        Intent i = new Intent(getApplicationContext(), DatabaseContributionActivity.class);
+                        i.putExtra("plant_type", plantType);
+                        startActivity(i);
+                    }
+                });
+        AlertDialog databaseDialog = builder.create();
+        databaseDialog.show();
     }
 
     private void promptForPicture(final String plantName) {
@@ -110,6 +122,7 @@ public class AddPlantActivity extends AppCompatActivity {
         builder.setMessage("Do you want to take a picture of this plant?")
                 .setNegativeButton("No", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
+
                         startActivity(new Intent(getApplicationContext(), MainActivity.class));
                     }
                 })
