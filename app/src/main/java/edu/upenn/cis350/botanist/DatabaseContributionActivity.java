@@ -28,6 +28,7 @@ public class DatabaseContributionActivity extends AppCompatActivity {
         String light = String.valueOf(((TextView) findViewById(R.id.light)).getText());
         database.addPlant(name, website, light);
         startActivity(new Intent(getApplicationContext(), MainActivity.class));
+        //finish();
     }
 
 

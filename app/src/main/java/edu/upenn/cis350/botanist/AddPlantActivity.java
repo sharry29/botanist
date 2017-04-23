@@ -104,6 +104,7 @@ public class AddPlantActivity extends AppCompatActivity {
         builder.setMessage("This plant does not exist in our database. Would you like to add it now?")
                 .setNegativeButton("No", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
+                        startActivity(new Intent(getApplicationContext(), MainActivity.class));
                     }
                 })
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {

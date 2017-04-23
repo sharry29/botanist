@@ -121,6 +121,19 @@ public class ViewPlantActivity extends AppCompatActivity{
                 imageScroll.addView(imgB);
             }
         }
+        if (description.getText().equals("Sorry, no information about this plant is available at the moment.")) {
+            Button addToDB = new Button(this);
+            addToDB.setText("Add this plant to our database!");
+            addToDB.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent i = new Intent(getApplicationContext(), DatabaseContributionActivity.class);
+                    i.putExtra("plant_type", plant.getType());
+                    startActivity(i);
+                }
+            });
+            viewPlantLayout.addView(addToDB);
+        }
 
         Button takePicture = new Button(this);
         takePicture.setText("Take A New Picture");
@@ -169,6 +182,7 @@ public class ViewPlantActivity extends AppCompatActivity{
             }
         });
         viewPlantLayout.addView(goBack);
+
     }
 
     public void imageScrollButtonPress(int id) {
