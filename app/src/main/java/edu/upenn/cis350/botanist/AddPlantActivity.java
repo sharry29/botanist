@@ -19,10 +19,13 @@ import android.widget.Toast;
 
 import com.google.firebase.database.*;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.*;
@@ -85,6 +88,20 @@ public class AddPlantActivity extends AppCompatActivity {
         String FILENAME = "my_plants";
         FileOutputStream fos = null;
         try {
+            FileInputStream f = openFileInput(FILENAME);
+            InputStreamReader isReader = new InputStreamReader(f);
+            BufferedReader in = new BufferedReader(isReader);
+
+            String info = "";
+            while ((info = in.readLine()) != null) {
+                String[] parts = info.split(":");
+                if (parts[0].toLowerCase().equals(plantName.toLowerCase())) {
+                    Toast.makeText(getApplicationContext(), "You already have a plant named " +
+                            plantName + ". Please pick another name!", Toast.LENGTH_LONG).show();
+                    return;
+                }
+            }
+            f.close();
             fos = openFileOutput(FILENAME, Context.MODE_APPEND); 
             fos.write(plantInfo.getBytes());
             fos.close();
