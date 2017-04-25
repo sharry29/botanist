@@ -166,6 +166,7 @@ public class ViewPlantActivity extends AppCompatActivity{
             public void onClick(View v) {
                 Intent daysWateredIntent = new Intent(getApplicationContext(),
                         DaysWateredActivity.class);
+                daysWateredIntent.putExtra("Plant Name", plant.getName());
                 startActivity(daysWateredIntent);
             }
         });
