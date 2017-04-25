@@ -85,7 +85,7 @@ public class AddPlantActivity extends AppCompatActivity {
         String FILENAME = "my_plants";
         FileOutputStream fos = null;
         try {
-            fos = openFileOutput(FILENAME, Context.MODE_APPEND);
+            fos = openFileOutput(FILENAME, Context.MODE_APPEND); 
             fos.write(plantInfo.getBytes());
             fos.close();
         } catch (FileNotFoundException e) {
