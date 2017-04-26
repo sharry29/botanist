@@ -3,6 +3,7 @@ package edu.upenn.cis350.botanist;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
@@ -58,9 +59,6 @@ public class ViewPlantActivity extends AppCompatActivity{
 
         //Get the plant object from context
         plant = (Plant) getIntent().getSerializableExtra("Plant");
-        if (plant == null) {
-            System.out.println("No plant was passed to this page. Sad!");
-        }
 
         //Get jpg images from file
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
@@ -76,7 +74,12 @@ public class ViewPlantActivity extends AppCompatActivity{
         title.setTypeface(Typeface.DEFAULT_BOLD);
         title.setPadding(25,0, 0, 0);
         if (database.plantExists(plant.getType())) {
-            genus.setText(plant.getType() + "\n~Light Needs: " + database.getPlantByName(plant.getType()).getLight());
+            String light = database.getPlantByName(plant.getType()).getLight();
+            if (light.contains("null")) {
+                genus.setText(plant.getType() + "\n~Light Needs: " + "unavailable.");
+            } else {
+                genus.setText(plant.getType() + "\n~Light Needs: " + light);
+            }
         } else {
             genus.setText(plant.getType());
         }
@@ -153,10 +156,15 @@ public class ViewPlantActivity extends AppCompatActivity{
         viewGIF.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent GifIntent = new Intent(getApplicationContext(), GifActivity.class);
-                GifIntent.putExtra("images", images);
-                GifIntent.putExtra("Plant", plant.getName());
-                startActivity(GifIntent);
+                if (images != null) {
+                    Intent GifIntent = new Intent(getApplicationContext(), GifActivity.class);
+                    GifIntent.putExtra("images", images);
+                    GifIntent.putExtra("Plant", plant.getName());
+                    startActivity(GifIntent);
+                } else {
+                    Toast.makeText(getApplicationContext(), "You need to take pictures before we can generate your GIF!",
+                            Toast.LENGTH_LONG).show();
+                }
             }
         });
         viewPlantLayout.addView(viewGIF);
@@ -175,6 +183,7 @@ public class ViewPlantActivity extends AppCompatActivity{
         viewPlantLayout.addView(viewDaysWatered);
 
         Button goBack = new Button(this);
+        goBack.setBackgroundColor(Color.DKGRAY);
         goBack.setText("Go Back to My Plants");
         goBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -190,13 +199,11 @@ public class ViewPlantActivity extends AppCompatActivity{
 
     public void imageScrollButtonPress(int id) {
         //Any button press in this reigon will bring up a gallery of all photos.
-        System.out.println("Pressed image number " + (id + 1));
     }
 
     private File[] findAllImages(File plantDir) {
         File[] jpg = plantDir.listFiles(new FilenameFilter() {
             public boolean accept(File plantDir, String filename) {
-                System.out.println(filename.toLowerCase());
                 return filename.toLowerCase().endsWith(".jpg");
             }
         });
@@ -215,7 +222,6 @@ public class ViewPlantActivity extends AppCompatActivity{
                 photoFile = createImageFile(folderName);
             } catch (IOException ex) {
                 // Error occurred while creating the File
-                System.out.println(ex);
                 return;
             }
             // Continue only if the File was successfully created
@@ -234,7 +240,6 @@ public class ViewPlantActivity extends AppCompatActivity{
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        System.out.print(data == null);
         // Check which request we're responding to
         if (requestCode == PhotoActivity.REQUEST_IMAGE_CAPTURE) {
             if (resultCode == RESULT_OK) {
@@ -379,5 +384,10 @@ public class ViewPlantActivity extends AppCompatActivity{
                     Toast.LENGTH_LONG);
             toast.show();
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        // Override use of back button
     }
 }
