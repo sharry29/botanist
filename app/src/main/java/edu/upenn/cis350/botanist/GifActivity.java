@@ -69,6 +69,9 @@ public class GifActivity extends AppCompatActivity{
             Bitmap rotated = BitmapFactory.decodeFile(frameFile.getValue().toString(), options);
             Matrix matrix = new Matrix();
             matrix.postRotate(90);
+            if (rotated == null) {
+                continue;
+            }
             Bitmap fixed = Bitmap.createBitmap(rotated, 0, 0,
                     rotated.getWidth(), rotated.getHeight(), matrix, true);
             BitmapDrawable frame = new BitmapDrawable(this.getResources(), fixed);

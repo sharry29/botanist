@@ -117,9 +117,13 @@ public class MainActivity extends AppCompatActivity {
                 Matrix matrix = new Matrix();
                 matrix.postRotate(90);
                 Bitmap flowerPicture = BitmapFactory.decodeFile(latestPic.getAbsolutePath(), options);
-                Bitmap fixed = Bitmap.createBitmap(flowerPicture, 0, 0,
-                        flowerPicture.getWidth(), flowerPicture.getHeight(), matrix, true);
-                flowerImg.setImageBitmap(fixed);
+                if (flowerPicture == null) {
+                    flowerImg.setImageResource(R.drawable.flower);
+                } else {
+                    Bitmap fixed = Bitmap.createBitmap(flowerPicture, 0, 0,
+                            flowerPicture.getWidth(), flowerPicture.getHeight(), matrix, true);
+                    flowerImg.setImageBitmap(fixed);
+                }
             }
 
 
