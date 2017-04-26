@@ -63,11 +63,17 @@ public class AddPlantActivity extends AppCompatActivity {
         AutoCompleteTextView textView = (AutoCompleteTextView) findViewById(R.id.plant_list);
         String plant = String.valueOf(textView.getText());
         if (database.plantExists(plant)) {
-            Uri uri = Uri.parse(database.getPlantByName(plant).getUrl());
-            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-            startActivity(intent);
+            try {
+                Uri uri = Uri.parse(database.getPlantByName(plant).getUrl());
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                startActivity(intent);
+            } catch (android.content.ActivityNotFoundException e) {
+                Toast.makeText(getApplicationContext(), "There is either no website associated with this plant yet, or the website no longer exists. Sorry!",
+                        Toast.LENGTH_LONG).show();
+            }
         } else {
-            Toast toast = Toast.makeText(getApplicationContext(), "There is not a website associated with this plant yet!", Toast.LENGTH_LONG);
+            Toast toast = Toast.makeText(getApplicationContext(), "There is either no website associated with this plant yet, or the website no longer exists. Sorry!",
+                    Toast.LENGTH_LONG);
             toast.show();
         }
     }
