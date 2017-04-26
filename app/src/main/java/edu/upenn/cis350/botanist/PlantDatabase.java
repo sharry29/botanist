@@ -97,4 +97,19 @@ public class PlantDatabase {
         m.put("url", website);
         ref.child(name).setValue(m);
     }
+
+    /**
+     * Create an array containing the names of all of the plants
+     * @return
+     */
+    public String[] getPlantNames() {
+        String[] plantStrings = new String[plantList.size()];
+
+        int count = 0;
+        for (PlantModel curr : plantList) {
+            plantStrings[count] = curr.getName();
+            count++;
+        }
+        return plantStrings;
+    }
 }

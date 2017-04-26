@@ -29,7 +29,6 @@ public class ScrapeWebsite {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        g.printStatusCode();
         String html = g.getContents();
         html.replaceAll("\\s+", "");
         Pattern p = Pattern.compile("href=\"/product/\\w*\">");
