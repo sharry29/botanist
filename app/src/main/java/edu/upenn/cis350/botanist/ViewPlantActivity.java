@@ -75,23 +75,14 @@ public class ViewPlantActivity extends AppCompatActivity{
         title.setTextSize(25);
         title.setTypeface(Typeface.DEFAULT_BOLD);
         title.setPadding(25,0, 0, 0);
-        genus.setText(plant.getType());
+        if (database.plantExists(plant.getType())) {
+            genus.setText(plant.getType() + "\n~Light Needs: " + database.getPlantByName(plant.getType()).getLight());
+        } else {
+            genus.setText(plant.getType());
+        }
         genus.setTextSize(15);
         genus.setTypeface(Typeface.defaultFromStyle(Typeface.ITALIC));
         genus.setPadding(25, 0, 0, 0);
-
-
-        //Add a Description box. Obviously this is just filler text, will replace with plant info
-        //when we find a plant API (or download a plant dictionary)
-        TextView description = (TextView) findViewById(R.id.plant_description);
-        PlantModel p = database.getPlantByName(plant.getType());
-        if (p == null) {
-            description.setText("Sorry, no information about this plant is available at the moment.");
-        } else {
-            description.setText("Light needs: " + p.getLight() + "\nYou can find more information about this plant at " + p.getUrl());
-        }
-            description.setPadding(25, 0, 0, 0);
-        //viewPlantLayout.addView(description);
 
         //Create horizontal-scroll images from jpgs
         LinearLayout imageScroll = (LinearLayout) findViewById(R.id.image_spinner);
@@ -121,7 +112,7 @@ public class ViewPlantActivity extends AppCompatActivity{
                 imageScroll.addView(imgB);
             }
         }
-        if (description.getText().equals("Sorry, no information about this plant is available at the moment.")) {
+        if (!database.plantExists(plant.getType())) {
             Button addToDB = new Button(this);
             addToDB.setText("Add this plant to our database!");
             addToDB.setOnClickListener(new View.OnClickListener() {
@@ -133,6 +124,17 @@ public class ViewPlantActivity extends AppCompatActivity{
                 }
             });
             viewPlantLayout.addView(addToDB);
+        }
+        if (database.plantExists(plant.getType())) {
+            Button viewDescription = new Button(this);
+            viewDescription.setText("View a Description of the " + plant.getType());
+            viewDescription.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    checkDescription(plant.getType());
+                }
+            });
+            viewPlantLayout.addView(viewDescription);
         }
 
         Button takePicture = new Button(this);
@@ -360,5 +362,22 @@ public class ViewPlantActivity extends AppCompatActivity{
             startActivityForResult(managePicsIntent, 73);
         }
         return true;
+    }
+
+    private void checkDescription(String plant) {
+        if (database.plantExists(plant)) {
+            try {
+                Uri uri = Uri.parse(database.getPlantByName(plant).getUrl());
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                startActivity(intent);
+            } catch (android.content.ActivityNotFoundException e) {
+                Toast.makeText(getApplicationContext(), "There is either no website associated with this plant yet, or the website no longer exists. Sorry!",
+                        Toast.LENGTH_LONG).show();
+            }
+        } else {
+            Toast toast = Toast.makeText(getApplicationContext(), "There is either no website associated with this plant yet, or the website no longer exists. Sorry!",
+                    Toast.LENGTH_LONG);
+            toast.show();
+        }
     }
 }
