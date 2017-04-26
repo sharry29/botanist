@@ -173,7 +173,7 @@ public class MainActivity extends AppCompatActivity {
     private File findLatestImage(int i, File plantDir) throws ParseException {
         File[] jpg = plantDir.listFiles(new FilenameFilter() {
             public boolean accept(File plantDir, String filename)
-            { System.out.println(filename.toLowerCase()); return filename.toLowerCase().endsWith(".jpg"); }
+            { ; return filename.toLowerCase().endsWith(".jpg"); }
         } );
 
 
@@ -204,8 +204,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void myPlantsButtonPress(int i) {
-        System.out.println("You clicked button number " + (i + 1) + "!");
-        System.out.println("Name: " + plantList.get(i).getName() + " Type: " + plantList.get(i).getType());
         Intent viewPlantIntent = new Intent(getApplicationContext(), ViewPlantActivity.class);
         viewPlantIntent.putExtra("Plant", plantList.get(i));
         startActivity(viewPlantIntent);
@@ -215,12 +213,10 @@ public class MainActivity extends AppCompatActivity {
 
     private void readPlantsFromFile() {
         try {
-            System.out.println("Reading plants...");
             String FILENAME = "my_plants";
             PackageManager m = getPackageManager();
             String s = getPackageName();
             PackageInfo p = m.getPackageInfo(s, 0);
-            System.out.println(p.applicationInfo.dataDir);
             FileInputStream f = openFileInput(FILENAME);
             InputStreamReader isReader = new InputStreamReader(f);
             BufferedReader in = new BufferedReader(isReader);
@@ -229,13 +225,10 @@ public class MainActivity extends AppCompatActivity {
             while ((plantInfo = in.readLine()) != null) {
                 plantList.add(new Plant(plantInfo));
             }
-            System.out.println("Found " + plantList.size());
             in.close();
         } catch (FileNotFoundException e) {
-            System.out.println("Plant file not found.");
             e.printStackTrace();
         } catch (IOException e) {
-            System.out.println("IOException in readPlantsFromFile() in MyPlantsActivity");
             e.printStackTrace();
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();

@@ -95,7 +95,6 @@ public class ManagePicturesActivity extends AppCompatActivity {
         File plantDir = new File(storageDir.getAbsolutePath() + "/" + plantName);
         File[] jpg = plantDir.listFiles(new FilenameFilter() {
             public boolean accept(File plantDir, String filename) {
-                System.out.println(filename.toLowerCase());
                 return filename.toLowerCase().endsWith(".jpg");
             }
         });
