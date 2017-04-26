@@ -54,7 +54,7 @@ public class DaysWateredActivity extends AppCompatActivity {
     }
 
     private boolean setUpWateredList() {
-        List<String> daysWatered = null;
+        List<String> daysWatered = new ArrayList<>();
 
         BufferedReader br = null;
         try {
@@ -62,8 +62,6 @@ public class DaysWateredActivity extends AppCompatActivity {
                 FileInputStream fis = openFileInput(fileName);
                 InputStreamReader isr = new InputStreamReader(fis);
                 br = new BufferedReader(isr);
-
-                daysWatered = new ArrayList<>();
 
                 String nextLine = br.readLine();
                 while (nextLine != null) {
