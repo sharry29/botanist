@@ -50,13 +50,15 @@ public class GifActivity extends AppCompatActivity{
 
         TreeMap<Date, File> orderedImages = new TreeMap<>();
         for (File img : images) {
-            String thisDateString =
-                    img.getName().substring(plant.length(), plant.length() + 15);
-            try {
-                Date thisDate = format.parse(thisDateString);
-                orderedImages.put(thisDate, img);
-            } catch (ParseException e) {
-                System.err.println("Failed to generate GIF.");
+            if (img != null) {
+                String thisDateString =
+                        img.getName().substring(plant.length(), plant.length() + 15);
+                try {
+                    Date thisDate = format.parse(thisDateString);
+                    orderedImages.put(thisDate, img);
+                } catch (ParseException e) {
+                    System.err.println("Failed to generate GIF.");
+                }
             }
         }
         numPhotos = orderedImages.size();

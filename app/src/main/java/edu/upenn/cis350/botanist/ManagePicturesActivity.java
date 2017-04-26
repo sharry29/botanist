@@ -40,7 +40,7 @@ public class ManagePicturesActivity extends AppCompatActivity {
         selected = new boolean[pictures.length]; //init to false!
 
         Button backButton = (Button) findViewById(R.id.managePicsReturnButton);
-        backButton.setText("Return to " + plant.getName());
+        backButton.setText("Return to Main Page");
 
         GridView gridview = (GridView) findViewById(R.id.current_pictures);
         gridview.setAdapter(new ImageAdapter(this, pictures));

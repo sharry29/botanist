@@ -75,7 +75,7 @@ public class ViewPlantActivity extends AppCompatActivity{
         title.setPadding(25,0, 0, 0);
         if (database.plantExists(plant.getType())) {
             String light = database.getPlantByName(plant.getType()).getLight();
-            if (light.contains("null")) {
+            if (light.contains("null") || light.equals("")) {
                 genus.setText(plant.getType() + "\n~Light Needs: " + "unavailable.");
             } else {
                 genus.setText(plant.getType() + "\n~Light Needs: " + light);
@@ -102,17 +102,19 @@ public class ViewPlantActivity extends AppCompatActivity{
                 final BitmapFactory.Options options = new BitmapFactory.Options();
                 options.inSampleSize = 10;
                 Bitmap flowerPicture = BitmapFactory.decodeFile(images[i].getAbsolutePath(), options);
-                imgB.setImageBitmap(flowerPicture);
+                if (flowerPicture != null) {
+                    imgB.setImageBitmap(flowerPicture);
 
-                //Set the button's onclick listener
-                imgB.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        imageScrollButtonPress(v.getId());
-                    }
-                });
+                    //Set the button's onclick listener
+                    imgB.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            imageScrollButtonPress(v.getId());
+                        }
+                    });
 
-                imageScroll.addView(imgB);
+                    imageScroll.addView(imgB);
+                }
             }
         }
         if (!database.plantExists(plant.getType())) {
