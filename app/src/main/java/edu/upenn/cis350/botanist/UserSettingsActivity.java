@@ -53,7 +53,7 @@ public class UserSettingsActivity extends AppCompatActivity {
 
         // Presets the notification frequency of the spinner
         String freqPref = userSettings.getString("notificationFrequency", null);
-        if (freqPref != null && (freqPref.equals("Hourly") || freqPref.equals("Daily") ||
+        if (freqPref != null && (freqPref.equals("Daily") ||
                 freqPref.equals("Never"))) {
             spinner.setSelection(adapter.getPosition(freqPref));
         }

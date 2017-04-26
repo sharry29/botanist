@@ -31,11 +31,8 @@ public class NotificationPublisher extends BroadcastReceiver {
         // Creates the intent that will be followed when the notification is clicked
         // Ensures that pressing the back button will return the user to the main menu instead of
         // out of the app
-        Intent takePhotoIntent = new Intent(context, PhotoActivity.class);
-        TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
-        stackBuilder.addParentStack(PhotoActivity.class);
-        stackBuilder.addNextIntent(takePhotoIntent);
-        PendingIntent takePhotoPendingIntent = stackBuilder.getPendingIntent(0,
+        Intent mainIntent = new Intent(context, MainActivity.class);
+        PendingIntent takePhotoPendingIntent = PendingIntent.getBroadcast(context, 0, mainIntent,
                 PendingIntent.FLAG_CANCEL_CURRENT);
         builder.setContentIntent(takePhotoPendingIntent);
 
@@ -54,7 +51,7 @@ public class NotificationPublisher extends BroadcastReceiver {
         // Sets the time for the notification to be sent
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.set(Calendar.HOUR_OF_DAY, 8);
+        calendar.set(Calendar.HOUR_OF_DAY, 12);
         calendar.set(Calendar.MINUTE, 0);
         calendar.set(Calendar.SECOND, 1);
 
