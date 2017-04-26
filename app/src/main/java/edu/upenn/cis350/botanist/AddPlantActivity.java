@@ -54,9 +54,9 @@ public class AddPlantActivity extends AppCompatActivity {
 
 
     /**
-     * Checks to see if our collection of plants includes the plant the user wants to add. If so,
-     * redirect the user to the Wikipedia page for the plant if they click the description button.
-     * If we do not have this plant on record, let the user know.
+     * Checks to see if our databaseincludes the plant the user wants to add. If so,
+     * redirect the user to the website associated with that plant.
+     * If we do not have this plant on record or if the website is not valid, send a message to the user..
      * @param view
      */
     public void checkDescription(View view) {
@@ -68,11 +68,13 @@ public class AddPlantActivity extends AppCompatActivity {
                 Intent intent = new Intent(Intent.ACTION_VIEW, uri);
                 startActivity(intent);
             } catch (android.content.ActivityNotFoundException e) {
-                Toast.makeText(getApplicationContext(), "There is either no website associated with this plant yet, or the website no longer exists. Sorry!",
+                Toast.makeText(getApplicationContext(), "There is either no website associated with " +
+                        "this plant yet, or the website no longer exists. Sorry!",
                         Toast.LENGTH_LONG).show();
             }
         } else {
-            Toast toast = Toast.makeText(getApplicationContext(), "There is either no website associated with this plant yet, or the website no longer exists. Sorry!",
+            Toast toast = Toast.makeText(getApplicationContext(), "There is either no website associated " +
+                    "with this plant yet, or the website no longer exists. Sorry!",
                     Toast.LENGTH_LONG);
             toast.show();
         }
@@ -80,7 +82,8 @@ public class AddPlantActivity extends AppCompatActivity {
 
     /**
      * Add the user's new plant to internal storage. Plants are stored in the format "Plant_Name:Plant_Type".
-     * Each plant is on its own individual line in the file.
+     * Each plant is on its own individual line in the file. If the plant does not exist in our database,
+     * the user is given the option to add it. Otherwise, the user is redirected to their new plant's page.
      * @param view
      */
     public void addNewPlant(View view) {
@@ -125,6 +128,12 @@ public class AddPlantActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * This dialogue box asks the user if they want to add the new plant type to our database. If they do,
+     * they are redirected to the DatabaseContributionActivity, otherwise they are redirected to their plant's page.
+     * @param plantType
+     * @param plantName
+     */
     private void addToDatabase(final String plantType, final String plantName) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("This plant does not exist in our database. Would you like to add it now?")

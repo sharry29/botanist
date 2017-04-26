@@ -93,7 +93,6 @@ public class MainActivity extends AppCompatActivity {
             try {
                 latestPic = findLatestImage(i, plantDir);
             } catch(Exception e) {
-                System.out.println("Oh no! Parse Exception.");
                 e.printStackTrace();
             }
 
@@ -194,12 +193,8 @@ public class MainActivity extends AppCompatActivity {
                         img.getName().substring
                                 (plantList.get(i).getName().length(),
                                         plantList.get(i).getName().length() + 15);
-//                    //DEBUGGING
-//                    System.out.println("DATE STRING: " + thisDateString);
                 Date thisDate = format.parse(thisDateString);
                 photoDates.put(thisDate, img);
-//                    //DEBUGGING
-//                    System.out.println("LATEST DATE    :   " + latestDate);
             }
             return photoDates.get(photoDates.lastKey());
         } else {

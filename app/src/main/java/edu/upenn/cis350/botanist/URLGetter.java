@@ -31,22 +31,6 @@ public class URLGetter {
 
     }
 
-    /**
-     * This method will print the status codes from the connection.
-     */
-    public void printStatusCode() {
-
-        try {
-
-            int code = httpConnection.getResponseCode();
-            String message = httpConnection.getResponseMessage();
-
-            System.out.println(code + " : " + message);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-    }
 
     /**
      * This method will get the HTML contents.
@@ -64,7 +48,6 @@ public class URLGetter {
                 str += line;
             }
         } catch (Exception e) {
-            //e.printStackTrace();
         }
 
         return str;

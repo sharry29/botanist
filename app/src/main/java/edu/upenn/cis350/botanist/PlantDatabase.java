@@ -15,6 +15,9 @@ public class PlantDatabase {
     private FirebaseDatabase db;
     private Map<String, Map<String, String>> plants;
 
+    /**
+     * Get an instance of the Firebase Database
+     */
     private PlantDatabase() {
         db = FirebaseDatabase.getInstance();
         ref = db.getReference();
@@ -22,6 +25,10 @@ public class PlantDatabase {
         plantList = new LinkedList<PlantModel>();
     }
 
+    /**
+     * Get an instance of the database. Only one instance allowed for the whole app.
+     * @return
+     */
     public static PlantDatabase getInstance() {
         if (instance == null) {
             instance = new PlantDatabase();
@@ -30,7 +37,10 @@ public class PlantDatabase {
     }
 
     ValueEventListener plantListener = new ValueEventListener() {
-
+        /**
+         * Get the information about the database. It is stored as a map.
+         * @param dataSnapshot
+         */
         @Override
         public void onDataChange(DataSnapshot dataSnapshot) {
             Map<String, Map<String, String>> plants = (Map<String, Map<String, String>>) dataSnapshot.getValue();
@@ -42,23 +52,15 @@ public class PlantDatabase {
 
         @Override
         public void onCancelled(DatabaseError databaseError) {
-            // Getting Post failed, log a message
-            System.out.println(databaseError);
-            // ...
         }
     };
 
-    public String[] getPlantNames() {
-        String[] plantStrings = new String[plantList.size()];
 
-        int count = 0;
-        for (PlantModel curr : plantList) {
-            plantStrings[count] = curr.getName();
-            count++;
-        }
-        return plantStrings;
-    }
-
+    /**
+     * Get a model for a plant based on the name of the plant type
+     * @param name
+     * @return
+     */
     public PlantModel getPlantByName(String name) {
         for (PlantModel curr : plantList) {
             if (name.equals(curr.getName())) {
@@ -68,6 +70,11 @@ public class PlantDatabase {
         return null;
     }
 
+    /**
+     * Check to see if a specific type of plant exists
+     * @param name
+     * @return
+     */
     public boolean plantExists(String name) {
         for (PlantModel curr : plantList) {
             if (curr.getName().equals(name)) {
@@ -77,13 +84,17 @@ public class PlantDatabase {
         return false;
     }
 
+    /**
+     * Add a new user submitted plant to the database
+     * @param name
+     * @param website
+     * @param light
+     */
     public void addPlant(String name, String website, String light) {
         Map<String, String> m = new HashMap<String, String>();
         Map<String, String> info = new HashMap<String, String>();
         m.put("light", light);
         m.put("url", website);
-        //m.put(name, info);
-        //ref.push().setValue(m);
         ref.child(name).setValue(m);
     }
 }

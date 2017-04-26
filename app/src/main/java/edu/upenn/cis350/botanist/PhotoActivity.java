@@ -154,7 +154,6 @@ public class PhotoActivity extends AppCompatActivity {
                 photoFile = createImageFile(folderName);
             } catch (IOException ex) {
                 // Error occurred while creating the File
-                System.out.println(ex);
                 return;
             }
             // Continue only if the File was successfully created
@@ -172,7 +171,6 @@ public class PhotoActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        System.out.print(data == null);
         // Check which request we're responding to
         if (requestCode == REQUEST_IMAGE_CAPTURE) {
             if (resultCode == RESULT_OK) {

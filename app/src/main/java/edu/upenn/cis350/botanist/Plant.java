@@ -31,7 +31,6 @@ public class Plant implements Serializable {
             this.name = split[0];
             this.type = split[1];
         } catch (Exception e) {
-            System.out.println("An error occurred trying to create this plant.");
         }
     }
 

@@ -13,6 +13,10 @@ public class DatabaseContributionActivity extends AppCompatActivity {
 
     private PlantDatabase database;
 
+    /**
+     * Start the database contribution activity.
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,6 +26,11 @@ public class DatabaseContributionActivity extends AppCompatActivity {
         database = PlantDatabase.getInstance();
     }
 
+    /**
+     * When the user presses the submit button, we use the information in the form to create a new plant
+     * and add it to the database.
+     * @param view
+     */
     public void submit(View view) {
         String name = String.valueOf(((TextView) findViewById(R.id.new_plant)).getText());
         String website = String.valueOf(((TextView) findViewById(R.id.website)).getText());
@@ -30,7 +39,6 @@ public class DatabaseContributionActivity extends AppCompatActivity {
         Intent i = new Intent(getApplicationContext(), ViewPlantActivity.class);
         i.putExtra("Plant", new Plant(getIntent().getStringExtra("plant_name"), getIntent().getStringExtra("plant_type")));
         startActivity(i);
-        //startActivity(new Intent(getApplicationContext(), MainActivity.class));
     }
 
 
