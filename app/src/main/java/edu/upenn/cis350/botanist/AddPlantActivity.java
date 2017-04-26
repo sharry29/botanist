@@ -62,12 +62,12 @@ public class AddPlantActivity extends AppCompatActivity {
     public void checkDescription(View view) {
         AutoCompleteTextView textView = (AutoCompleteTextView) findViewById(R.id.plant_list);
         String plant = String.valueOf(textView.getText());
-        if (plant.equals("Sunflower")) {
-            Uri uri = Uri.parse("https://en.wikipedia.org/wiki/Helianthus");
+        if (database.plantExists(plant)) {
+            Uri uri = Uri.parse(database.getPlantByName(plant).getUrl());
             Intent intent = new Intent(Intent.ACTION_VIEW, uri);
             startActivity(intent);
         } else {
-            Toast toast = Toast.makeText(getApplicationContext(), "A description is not available for this plant!", Toast.LENGTH_LONG);
+            Toast toast = Toast.makeText(getApplicationContext(), "There is not a website associated with this plant yet!", Toast.LENGTH_LONG);
             toast.show();
         }
     }
